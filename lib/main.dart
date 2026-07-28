@@ -1,9 +1,8 @@
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
-
-import 'pages/ai/ai_test.dart';
-import 'pages/module_selector.dart';
+import 'package:aletheia/pages/ai/ai_test.dart';
 import 'pages/bellylog/dashboard.dart';
+import 'pages/module_selector.dart';
 import 'pages/bellylog/homepage_bellylog.dart';
 import 'pages/bellylog/log_bowel_movements.dart';
 import 'pages/bellylog/log_daily_checkins.dart';
@@ -13,18 +12,22 @@ import 'pages/bellylog/view_bowel_movements.dart';
 import 'pages/bellylog/view_daily_checkins.dart';
 import 'pages/bellylog/view_meals.dart';
 import 'pages/bellylog/view_symptoms.dart';
-import 'pages/notifications.dart';
-import 'utilities/value_notifier.dart';
-import 'pages/checkpoints/homepage_checkpoints.dart';
-
+import '/pages/notifications.dart';
+import '/utilities/value_notifier.dart';
+import 'package:aletheia/pages/checkpoints/homepage_checkpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+// import 'package:dynamic_color/dynamic_color.dart';
+
 void main() async {
+  // Ensure bindings are initialized before calling async code
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  await Hive.openBox('MyBox');
+
+  // ignore: unused_local_variable
+  var box = await Hive.openBox('MyBox');
 
   NotifyTasks().initNotification();
   NotifyTasks().requestAndroidPermissions();
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Listen to your dark mode notifier here
     return ValueListenableBuilder<bool>(
       valueListenable: isDarkModeNotifier,
       builder: (context, isDarkMode, child) {
@@ -88,9 +92,7 @@ class MyApp extends StatelessWidget {
 
           routes: {
             '/': (context) => const WelcomePage(),
-
             '/login': (context) => const LoginPage(),
-
             '/homepage': (context) => const ModuleSelector(),
 
             '/checkpoints': (context) => const HomepageCheckpoints(),

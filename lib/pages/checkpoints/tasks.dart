@@ -1,10 +1,10 @@
-import '../../data/todo_database.dart';
-import '../../utilities/checkpoints/input_box.dart';
-import '../../utilities/checkpoints/todo_tile.dart';
-import '../notifications.dart';
-import '../../utilities/dark_mode_switcher.dart';
-import '../../utilities/checkpoints/progress_card.dart';
-import '../../utilities/checkpoints/empty_state.dart';
+import 'package:aletheia/utilities/checkpoints/empty_state.dart';
+import 'package:aletheia/utilities/checkpoints/progress_card.dart';
+import 'package:aletheia/utilities/dark_mode_switcher.dart';
+import 'package:aletheia/data/todo_database.dart';
+import 'package:aletheia/utilities/checkpoints/input_box.dart';
+import 'package:aletheia/utilities/checkpoints/todo_tile.dart';
+import 'package:aletheia/pages/notifications.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,14 +22,14 @@ class ToDoPage extends StatefulWidget {
 class _ToDoPageState extends State<ToDoPage> {
   final _myBox = Hive.box('MyBox');
 
-  final ToDoDataBase db = ToDoDataBase();
-  final TextEditingController _controller = TextEditingController();
+  ToDoDataBase db = ToDoDataBase();
+
+  final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    // Initialize daily tasks
     if (_myBox.get('TODOLIST') == null) {
       db.createInitialDaily();
       db.updateToDo();
@@ -37,7 +37,6 @@ class _ToDoPageState extends State<ToDoPage> {
       db.loadToDo();
     }
 
-    // Initialize long-term tasks
     if (_myBox.get('LONGTERM') == null) {
       db.createInitialLongTerm();
       db.updateLongTerm();
@@ -52,6 +51,7 @@ class _ToDoPageState extends State<ToDoPage> {
     setState(() {
       db.loadToDo();
       db.loadLongTerm();
+
       db.moveLongtermToDaily();
     });
   }
@@ -110,21 +110,22 @@ class _ToDoPageState extends State<ToDoPage> {
     showDialog(
       context: context,
       builder: (context) {
-        _controller.clear();
+        controller.clear();
 
         return InputBox(
-          controller: _controller,
+          controller: controller,
           currentTime: freshCurrentTime,
 
           onSave: (selectedTime) {
-            if (_controller.text.isNotEmpty) {
-              final int uniqueId = DateTime.now().millisecondsSinceEpoch
-                  .remainder(10000000);
+            if (controller.text.isNotEmpty) {
+              int uniqueId = DateTime.now().millisecondsSinceEpoch.remainder(
+                10000000,
+              );
 
               if (widget.pageId == 0) {
                 setState(() {
                   db.todoList.add([
-                    _controller.text,
+                    controller.text,
                     false,
                     selectedTime,
                     uniqueId,
@@ -136,13 +137,13 @@ class _ToDoPageState extends State<ToDoPage> {
                 NotifyTasks().scheduleTodoNotification(
                   id: uniqueId,
                   title: 'You have a task pending',
-                  body: _controller.text,
+                  body: controller.text,
                   dueDate: selectedTime,
                 );
               } else {
                 setState(() {
                   db.longTerm.add([
-                    _controller.text,
+                    controller.text,
                     false,
                     selectedTime,
                     uniqueId,
@@ -154,7 +155,7 @@ class _ToDoPageState extends State<ToDoPage> {
                 NotifyTasks().scheduleTodoNotification(
                   id: uniqueId,
                   title: 'You have a long-term task pending',
-                  body: _controller.text,
+                  body: controller.text,
                   dueDate: selectedTime,
                 );
               }
@@ -175,28 +176,29 @@ class _ToDoPageState extends State<ToDoPage> {
 
   void editTask(int index) {
     if (widget.pageId == 0) {
-      _controller.text = db.todoList[index][0];
+      controller.text = db.todoList[index][0];
     } else {
-      _controller.text = db.longTerm[index][0];
+      controller.text = db.longTerm[index][0];
     }
 
     showDialog(
       context: context,
       builder: (context) {
         return InputBox(
-          controller: _controller,
+          controller: controller,
 
           currentTime: widget.pageId == 0
               ? db.todoList[index][2]
               : db.longTerm[index][2],
 
           onSave: (selectedTime) {
-            if (_controller.text.isNotEmpty) {
+            if (controller.text.isNotEmpty) {
               if (widget.pageId == 0) {
                 final int taskId = db.todoList[index][3];
 
                 setState(() {
-                  db.todoList[index][0] = _controller.text;
+                  db.todoList[index][0] = controller.text;
+
                   db.todoList[index][2] = selectedTime;
                 });
 
@@ -205,14 +207,15 @@ class _ToDoPageState extends State<ToDoPage> {
                 NotifyTasks().scheduleTodoNotification(
                   id: taskId,
                   title: 'You have a task pending',
-                  body: _controller.text,
+                  body: controller.text,
                   dueDate: selectedTime,
                 );
               } else {
                 final int taskId = db.longTerm[index][3];
 
                 setState(() {
-                  db.longTerm[index][0] = _controller.text;
+                  db.longTerm[index][0] = controller.text;
+
                   db.longTerm[index][2] = selectedTime;
                 });
 
@@ -221,7 +224,7 @@ class _ToDoPageState extends State<ToDoPage> {
                 NotifyTasks().scheduleTodoNotification(
                   id: taskId,
                   title: 'You have a long-term task pending',
-                  body: _controller.text,
+                  body: controller.text,
                   dueDate: selectedTime,
                 );
               }
@@ -272,6 +275,7 @@ class _ToDoPageState extends State<ToDoPage> {
         }
 
         final item = db.todoList.removeAt(oldIndex);
+
         db.todoList.insert(newIndex, item);
       });
 
@@ -283,6 +287,7 @@ class _ToDoPageState extends State<ToDoPage> {
         }
 
         final item = db.longTerm.removeAt(oldIndex);
+
         db.longTerm.insert(newIndex, item);
       });
 
@@ -292,7 +297,7 @@ class _ToDoPageState extends State<ToDoPage> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -368,7 +373,6 @@ class _ToDoPageState extends State<ToDoPage> {
                   ),
                 ),
               ),
-
             // ─────────────────────────────────────────────
             // TASK LIST
             // ─────────────────────────────────────────────
@@ -441,13 +445,16 @@ class _ToDoPageState extends State<ToDoPage> {
         ),
       ),
 
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: createNewTask,
-        icon: const Icon(Icons.add_rounded),
-        label: Text(
-          widget.pageId == 0 ? 'Add checkpoint' : 'Add long-term goal',
-        ),
-      ),
+      floatingActionButton: currentTasks.length > 0
+          ? FloatingActionButton.extended(
+              heroTag: 'fab_${widget.pageId}',
+              onPressed: createNewTask,
+              icon: const Icon(Icons.add_rounded),
+              label: Text(
+                widget.pageId == 0 ? 'Add checkpoint' : 'Add long-term goal',
+              ),
+            )
+          : null,
     );
   }
 }

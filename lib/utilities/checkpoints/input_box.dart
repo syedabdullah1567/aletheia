@@ -61,7 +61,7 @@ class _InputBoxState extends State<InputBox> {
             ),
           ),
 
-          const SizedBox(width: 14),
+          const SizedBox(width: 10),
 
           Expanded(
             child: Text(
@@ -85,19 +85,6 @@ class _InputBoxState extends State<InputBox> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
 
           children: [
-            Text(
-              widget.pageNum == 0
-                  ? 'What would you like to accomplish today?'
-                  : 'What are you working towards?',
-
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                height: 1.4,
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
             TextField(
               controller: widget.controller,
               maxLines: 4,
@@ -145,7 +132,7 @@ class _InputBoxState extends State<InputBox> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
             if (widget.pageNum == 0)
               TimePickerBanner(
@@ -169,17 +156,26 @@ class _InputBoxState extends State<InputBox> {
         ),
       ),
 
-      actionsPadding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
+      actionsPadding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
 
       actions: [
-        MyButton(text: 'Cancel', onPressed: widget.onCancel, isPrimary: false),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MyButton(
+              text: 'Cancel',
+              onPressed: widget.onCancel,
+              isPrimary: false,
+            ),
 
-        const SizedBox(width: 8),
+            const SizedBox(width: 8),
 
-        MyButton(
-          text: isEditing ? 'Save changes' : 'Add checkpoint',
-          onPressed: () => widget.onSave(currentTime),
-          isPrimary: true,
+            MyButton(
+              text: isEditing ? 'Save changes' : 'Add checkpoint',
+              onPressed: () => widget.onSave(currentTime),
+              isPrimary: true,
+            ),
+          ],
         ),
       ],
     );

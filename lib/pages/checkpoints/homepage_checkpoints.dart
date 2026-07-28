@@ -25,24 +25,24 @@ class _HomepageCheckpointsState extends State<HomepageCheckpoints> {
       body: IndexedStack(index: currentIndex, children: _screens),
 
       bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
-
         backgroundColor: colorScheme.surface,
-
         indicatorColor: colorScheme.primaryContainer,
+
+        selectedIndex: currentIndex,
 
         elevation: 0,
 
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.check_circle_outline_rounded),
-            selectedIcon: Icon(Icons.check_circle_rounded),
+            icon: Icon(Icons.check_circle_outline),
+            selectedIcon: Icon(Icons.check_circle),
             label: 'Today',
           ),
 
           NavigationDestination(
-            icon: Icon(Icons.calendar_month),
-            selectedIcon: Icon(Icons.auto_awesome_rounded),
+            icon: Icon(Icons.calendar_month_outlined),
+            selectedIcon: Icon(Icons.calendar_month),
+
             label: 'Long-term',
           ),
         ],
