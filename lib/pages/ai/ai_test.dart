@@ -40,7 +40,7 @@ class _AITestState extends State<AITest> {
 
   // Calls the new function we added to the API file
   void _startNewChat() {
-    clearChatHistory();
+    //clearChatHistory();
     setState(() {
       answer = null; // Resets UI back to the default greeting
       controller.clear();

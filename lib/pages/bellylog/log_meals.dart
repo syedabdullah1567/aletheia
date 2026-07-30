@@ -1,3 +1,5 @@
+import 'package:aletheia/utilities/uniform_appbar.dart';
+
 import '../../utilities/custom_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Add this to your pubspec.yaml for easy date formatting
@@ -66,18 +68,10 @@ class _LogMealState extends State<LogMeal> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, '/bellylog');
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
-        title: const Text(
-          'Log Meal',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.arrow_back_rounded),
+        titleText: "Log Meal",
+        onPress: () => Navigator.pop(context),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),

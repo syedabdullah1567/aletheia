@@ -2,7 +2,7 @@ import 'package:aletheia/data/bellylog_database.dart';
 import 'package:aletheia/utilities/bellylog/belly_summary_card.dart';
 import 'package:aletheia/utilities/bellylog/bellylog_card.dart';
 import 'package:aletheia/utilities/bellylog/insights_card.dart';
-import 'package:aletheia/utilities/dark_mode_switcher.dart';
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 
 class AppStartPage extends StatefulWidget {
@@ -20,7 +20,8 @@ class _AppStartPageState extends State<AppStartPage> {
     super.initState();
 
     db = BellyLogDatabase();
-    db.loadData();
+    db.seedTest7DayData();
+    //db.loadData();
   }
 
   Future<void> _openPage(BuildContext context, String route) async {
@@ -53,34 +54,12 @@ class _AppStartPageState extends State<AppStartPage> {
     final mealsToday = _countEntriesToday(db.mealLog);
     final symptomsToday = _countEntriesToday(db.symptomLog);
     final bathroomVisitsToday = _countEntriesToday(db.bowelLog);
-    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-
-        //pinned: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-          tooltip: 'Go Back',
-        ),
-
-        title: Text(
-          'BellyLog',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-            letterSpacing: 8,
-          ),
-        ),
-
-        centerTitle: true,
-
-        actions: const [DarkModeSwitcher(), SizedBox(width: 8)],
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.arrow_back_rounded),
+        titleText: "Bellylog",
+        onPress: () => Navigator.pop(context),
       ),
 
       body: SafeArea(

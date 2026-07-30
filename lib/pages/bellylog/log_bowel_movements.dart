@@ -1,3 +1,4 @@
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../data/bellylog_database.dart';
@@ -68,12 +69,10 @@ class _LogBowelMovementState extends State<LogBowelMovement> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: const Text(
-          'Log Bowel Movement',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.arrow_back_rounded),
+        titleText: "Log Bathroom Visits",
+        onPress: () => Navigator.pop(context),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),

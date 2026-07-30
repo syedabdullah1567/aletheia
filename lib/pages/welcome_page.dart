@@ -129,11 +129,11 @@ class WelcomePage extends StatelessWidget {
                   height: 56,
                   child: FilledButton.icon(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/aitest');
+                      Navigator.pushNamed(context, '/bellylog_weekly_insight');
                     },
                     icon: const Icon(Icons.chat),
                     label: const Text(
-                      'Chat to Gemini',
+                      'Get Weekly Analysis',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
