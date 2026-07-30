@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 // Store the chat history globally so the conversation context is maintained
@@ -8,10 +9,24 @@ void clearChatHistory() {
   chatHistory.clear();
 }
 
+String cleanGeminiResponse(String text) {
+  return text
+      // Bold
+      .replaceAll('**', '')
+      // Italics
+      .replaceAll('*', '')
+      // Inline code
+      .replaceAll('`', '')
+      // Markdown headings
+      .replaceAll(RegExp(r'^#+\s*', multiLine: true), '')
+      // Bullet points
+      .replaceAll(RegExp(r'^\s*[-•]\s*', multiLine: true), '• ');
+}
+
 Future<String> getGeminiResponse(String userInput) async {
   const String endPoint =
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
-  const String apiKey = String.fromEnvironment('GEMINI_API_KEY');
+  final apiKey = dotenv.env['GEMINI_API_KEY']!;
 
   // 1. Add the new user prompt to the history
   chatHistory.add({
@@ -43,7 +58,9 @@ Future<String> getGeminiResponse(String userInput) async {
         ],
       });
 
-      return aiText;
+      final cleanedText = cleanGeminiResponse(aiText);
+
+      return cleanedText;
     } else {
       // Remove the failed user prompt so it doesn't break future requests
       chatHistory.removeLast();
