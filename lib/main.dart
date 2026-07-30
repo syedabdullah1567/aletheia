@@ -1,3 +1,4 @@
+import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
 import 'package:aletheia/pages/ai/ai_test.dart';
@@ -101,7 +102,7 @@ class MyApp extends StatelessWidget {
 
             '/bellylog': (context) => const AppStartPage(),
 
-            '/ai_insights_bellylog': (context) => const AITest(),
+            '/ai_insights_bellylog': (context) => const AiHomepageBellylog(),
 
             '/log_meal': (context) => const LogMeal(),
 

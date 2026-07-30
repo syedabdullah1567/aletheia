@@ -23,14 +23,14 @@ class InsightsCard extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                Icons.dashboard_rounded,
+                Icons.auto_awesome_rounded,
                 color: colors.onPrimaryContainer,
                 size: 28,
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
-                  "Go to Dashboard",
+                  "Get AI Insights",
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: colors.onPrimaryContainer,
                     fontWeight: FontWeight.w700,

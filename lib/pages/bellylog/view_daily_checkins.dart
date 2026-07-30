@@ -1,3 +1,4 @@
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -43,12 +44,10 @@ class _ViewDailyCheckins extends State<ViewDailyCheckins> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
 
-      appBar: AppBar(
-        title: const Text(
-          'Daily Check-in Logs',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.arrow_back_rounded),
+        titleText: "View Daily Check-ins",
+        onPress: () => Navigator.pop(context),
       ),
 
       body: sortedKeys.isEmpty

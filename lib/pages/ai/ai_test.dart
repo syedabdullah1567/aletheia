@@ -1,3 +1,4 @@
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import '../../utilities/ai/get_gemini_response.dart';
 import '../../utilities/dark_mode_switcher.dart';
@@ -51,21 +52,27 @@ class _AITestState extends State<AITest> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+
       // Added AppBar with Logout and New Chat buttons
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        leading: IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: () => Navigator.pushReplacementNamed(context, '/'),
-        ),
-        actions: [
-          const DarkModeSwitcher(),
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: 'New Chat',
-            onPressed: _startNewChat,
-          ),
-        ],
+      // appBar: AppBar(
+      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.logout),
+      //     onPressed: () => Navigator.pushReplacementNamed(context, '/'),
+      //   ),
+      //   actions: [
+      //     const DarkModeSwitcher(),
+      //     IconButton(
+      //       icon: const Icon(Icons.add),
+      //       tooltip: 'New Chat',
+      //       onPressed: _startNewChat,
+      //     ),
+      //   ],
+      // ),
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.logout_rounded),
+        titleText: "Chat with Gemini",
+        onPress: () => Navigator.pushReplacementNamed(context, '/'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

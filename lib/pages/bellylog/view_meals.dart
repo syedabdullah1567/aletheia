@@ -1,3 +1,4 @@
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -55,12 +56,10 @@ class _ViewMealLogsState extends State<ViewMealLogs> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: const Text(
-          'Meal History',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.arrow_back_rounded),
+        titleText: "View Meals",
+        onPress: () => Navigator.pop(context),
       ),
       body: sortedKeys.isEmpty
           ? Center(

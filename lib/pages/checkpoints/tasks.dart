@@ -1,6 +1,5 @@
 import 'package:aletheia/utilities/checkpoints/empty_state.dart';
 import 'package:aletheia/utilities/checkpoints/progress_card.dart';
-import 'package:aletheia/utilities/dark_mode_switcher.dart';
 import 'package:aletheia/data/todo_database.dart';
 import 'package:aletheia/utilities/checkpoints/input_box.dart';
 import 'package:aletheia/utilities/checkpoints/todo_tile.dart';

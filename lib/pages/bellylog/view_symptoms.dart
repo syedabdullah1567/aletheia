@@ -1,3 +1,4 @@
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -41,12 +42,10 @@ class _ViewSymptomLogsState extends State<ViewSymptomLogs> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: const Text(
-          'Symptom History',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.arrow_back_rounded),
+        titleText: "View Symptoms",
+        onPress: () => Navigator.pop(context),
       ),
       body: sortedKeys.isEmpty
           ? Center(

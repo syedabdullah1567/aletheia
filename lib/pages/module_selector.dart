@@ -1,6 +1,6 @@
 import 'package:aletheia/utilities/module_card.dart';
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
-import '../utilities/dark_mode_switcher.dart';
 
 class ModuleSelector extends StatefulWidget {
   const ModuleSelector({super.key});
@@ -17,31 +17,10 @@ class _ModuleSelectorState extends State<ModuleSelector> {
     // Custom squircle shape helper to keep code clean
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-
-        //pinned: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, '/');
-          },
-          icon: const Icon(Icons.logout_rounded),
-          tooltip: 'Logout',
-        ),
-
-        title: Text(
-          'Aletheia',
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 10,
-          ),
-        ),
-
-        centerTitle: true,
-
-        actions: const [DarkModeSwitcher(), SizedBox(width: 8)],
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.logout_rounded),
+        titleText: "Aletheia",
+        onPress: () => Navigator.pushReplacementNamed(context, '/'),
       ),
 
       body: Center(
