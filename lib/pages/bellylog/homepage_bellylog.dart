@@ -2,7 +2,6 @@ import 'package:aletheia/data/bellylog_database.dart';
 import 'package:aletheia/utilities/bellylog/belly_summary_card.dart';
 import 'package:aletheia/utilities/bellylog/bellylog_card.dart';
 import 'package:aletheia/utilities/bellylog/insights_card.dart';
-import 'package:aletheia/utilities/dark_mode_switcher.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +54,6 @@ class _AppStartPageState extends State<AppStartPage> {
     final mealsToday = _countEntriesToday(db.mealLog);
     final symptomsToday = _countEntriesToday(db.symptomLog);
     final bathroomVisitsToday = _countEntriesToday(db.bowelLog);
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: UniformAppbar(

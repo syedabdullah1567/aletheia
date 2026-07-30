@@ -1,3 +1,5 @@
+import 'package:aletheia/pages/ai/bellylog_daily.dart';
+import 'package:aletheia/pages/ai/bellylog_weekly.dart';
 import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
@@ -30,8 +32,8 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  // NotifyTasks().initNotification();
-  // NotifyTasks().requestAndroidPermissions();
+  NotifyTasks().initNotification();
+  NotifyTasks().requestAndroidPermissions();
 
   await dotenv.load(fileName: ".env");
 
@@ -103,6 +105,10 @@ class MyApp extends StatelessWidget {
             '/bellylog': (context) => const AppStartPage(),
 
             '/ai_insights_bellylog': (context) => const AiHomepageBellylog(),
+
+            '/bellylog_daily_insight': (context) => const BellylogDaily(),
+
+            '/bellylog_weekly_insight': (context) => const BellylogWeekly(),
 
             '/log_meal': (context) => const LogMeal(),
 

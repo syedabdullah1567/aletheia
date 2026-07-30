@@ -25,11 +25,17 @@ class UniformAppbar extends StatelessWidget implements PreferredSizeWidget {
         icon: leadIcon,
         tooltip: 'Return',
       ),
-      title: Text(
-        titleText,
-        style: theme.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.w800,
-          letterSpacing: 10,
+      title: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.center,
+        child: Text(
+          titleText,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
+            letterSpacing: 8,
+          ),
         ),
       ),
       centerTitle: true,
@@ -37,7 +43,6 @@ class UniformAppbar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // Tell Flutter how tall this custom AppBar should be
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

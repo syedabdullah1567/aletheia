@@ -1,4 +1,3 @@
-import 'package:aletheia/utilities/dark_mode_switcher.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:aletheia/pages/checkpoints/tasks.dart';
