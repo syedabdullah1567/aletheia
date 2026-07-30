@@ -21,6 +21,7 @@ class DateTimePickerBanner extends StatelessWidget {
 
     if (pickedDate != null) {
       final TimeOfDay? pickedTime = await showTimePicker(
+        // ignore: use_build_context_synchronously
         context: context,
         initialTime: TimeOfDay.fromDateTime(currentTime),
       );

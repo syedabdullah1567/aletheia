@@ -78,7 +78,7 @@ class WelcomePage extends StatelessWidget {
                   'Aletheia',
                   style: theme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.w700,
-                    letterSpacing: 8,
+                    letterSpacing: 12,
                     color: colorScheme.onSurface,
                   ),
                 ),

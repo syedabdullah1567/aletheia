@@ -445,7 +445,7 @@ class _ToDoPageState extends State<ToDoPage> {
         ),
       ),
 
-      floatingActionButton: currentTasks.length > 0
+      floatingActionButton: currentTasks.isNotEmpty
           ? FloatingActionButton.extended(
               heroTag: 'fab_${widget.pageId}',
               onPressed: createNewTask,
