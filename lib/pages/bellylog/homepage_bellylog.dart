@@ -1,3 +1,7 @@
+import 'package:aletheia/data/bellylog_database.dart';
+import 'package:aletheia/utilities/bellylog/belly_summary_card.dart';
+import 'package:aletheia/utilities/bellylog/bellylog_card.dart';
+import 'package:aletheia/utilities/bellylog/insights_card.dart';
 import 'package:aletheia/utilities/dark_mode_switcher.dart';
 import 'package:flutter/material.dart';
 
@@ -9,126 +13,175 @@ class AppStartPage extends StatefulWidget {
 }
 
 class _AppStartPageState extends State<AppStartPage> {
+  late BellyLogDatabase db;
+
+  @override
+  void initState() {
+    super.initState();
+
+    db = BellyLogDatabase();
+    db.loadData();
+  }
+
+  Future<void> _openPage(BuildContext context, String route) async {
+    await Navigator.pushNamed(context, route);
+
+    db.loadData();
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  int _countEntriesToday(Map<String, dynamic> log) {
+    final now = DateTime.now();
+
+    return log.keys.where((key) {
+      final entryDate = DateTime.tryParse(key);
+      if (entryDate == null) return false;
+
+      return entryDate.year == now.year &&
+          entryDate.month == now.month &&
+          entryDate.day == now.day;
+    }).length;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final db = BellyLogDatabase()..loadData();
+
+    final mealsToday = _countEntriesToday(db.mealLog);
+    final symptomsToday = _countEntriesToday(db.symptomLog);
+    final bathroomVisitsToday = _countEntriesToday(db.bowelLog);
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        actions: [DarkModeSwitcher()],
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+
+        //pinned: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Go Back',
+        ),
+
+        title: Text(
+          'BellyLog',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            letterSpacing: 8,
+          ),
+        ),
+
+        centerTitle: true,
+
+        actions: const [DarkModeSwitcher(), SizedBox(width: 8)],
       ),
+
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                'BellyLog',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.primary,
-                  letterSpacing: 1.2,
+        child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  BellySummaryCard(
+                    mealsToday: mealsToday,
+                    symptomsToday: symptomsToday,
+                    bathroomVisitsToday: bathroomVisitsToday,
+                  ),
+
+                  const SizedBox(height: 24),
+                ]),
+              ),
+            ),
+
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 40),
+              sliver: SliverGrid(
+                delegate: SliverChildListDelegate([
+                  BellyLogCard(
+                    icon: Icons.restaurant_rounded,
+                    title: "Log Meal",
+                    onTap: () => _openPage(context, '/log_meal'),
+                  ),
+
+                  BellyLogCard(
+                    icon: Icons.menu_book_rounded,
+                    title: "View Meals",
+
+                    onTap: () => _openPage(context, '/view_meals'),
+                  ),
+
+                  BellyLogCard(
+                    icon: Icons.monitor_heart_outlined,
+                    title: "Log Symptoms",
+
+                    onTap: () => _openPage(context, '/log_symptom'),
+                  ),
+
+                  BellyLogCard(
+                    icon: Icons.analytics_outlined,
+                    title: "View Symptoms",
+
+                    onTap: () => _openPage(context, '/view_symptoms'),
+                  ),
+
+                  BellyLogCard(
+                    icon: Icons.wc_rounded,
+                    title: "Log Bathroom Visits",
+
+                    onTap: () => _openPage(context, '/log_bowel_movement'),
+                  ),
+
+                  BellyLogCard(
+                    icon: Icons.list_alt_rounded,
+                    title: "View Bathroom Visits",
+
+                    onTap: () => _openPage(context, '/view_bowel_movements'),
+                  ),
+
+                  BellyLogCard(
+                    icon: Icons.today_rounded,
+                    title: "Daily Check-in",
+
+                    onTap: () => _openPage(context, '/log_daily_checkin'),
+                  ),
+
+                  BellyLogCard(
+                    icon: Icons.calendar_month_rounded,
+                    title: "View Check-ins",
+
+                    onTap: () => _openPage(context, '/view_daily_checkins'),
+                  ),
+                ]),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 14,
+                  mainAxisSpacing: 14,
+                  childAspectRatio: 1.18,
                 ),
               ),
+            ),
 
-              // 1. Log Meal
-              _buildMenuTile(
-                context,
-                icon: Icons.restaurant,
-                label: 'Log Meal',
-                onTap: () {
-                  Navigator.pushNamed(context, '/log_meal');
-                },
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+              sliver: SliverToBoxAdapter(
+                child: InsightsCard(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/ai_insights_bellylog");
+                  },
+                ),
               ),
-
-              // 2. Log Symptom
-              _buildMenuTile(
-                context,
-                icon: Icons.healing,
-                label: 'Log Symptom',
-                onTap: () {
-                  Navigator.pushNamed(context, '/log_symptom');
-                },
-              ),
-
-              // 3. Log Bathroom Visit
-              _buildMenuTile(
-                context,
-                icon: Icons.wc,
-                label: 'Log Bathroom Visit',
-                onTap: () {
-                  Navigator.pushNamed(context, '/log_bowel_movement');
-                },
-              ),
-
-              // 4. Daily Check-in
-              _buildMenuTile(
-                context,
-                icon: Icons.today,
-                label: 'Daily Check-in',
-                onTap: () {
-                  Navigator.pushNamed(context, '/log_daily_checkin');
-                },
-              ),
-
-              // 5. Dashboard
-              _buildMenuTile(
-                context,
-                icon: Icons.dashboard,
-                label: 'Go to Dashboard',
-                isPrimary: true,
-                onTap: () {
-                  Navigator.pushNamed(context, '/dashboard');
-                },
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-
-  // Helper method to keep your build tree clean and beautiful
-  Widget _buildMenuTile(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-    bool isPrimary = false,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    // Highlight the dashboard option subtly using the primary color track
-    final tileColor = isPrimary
-        ? colorScheme.primary
-        : colorScheme.secondaryContainer;
-    final contentColor = isPrimary
-        ? colorScheme.onPrimary
-        : colorScheme.onSecondaryContainer;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: ListTile(
-        leading: Icon(icon, color: contentColor, size: 26),
-        tileColor: tileColor,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 24.0,
-          vertical: 14.0,
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: Text(
-          label,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: contentColor,
-          ),
-        ),
-        onTap: onTap,
       ),
     );
   }

@@ -1,7 +1,6 @@
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
 import 'package:aletheia/pages/ai/ai_test.dart';
-import 'pages/bellylog/dashboard.dart';
 import 'pages/module_selector.dart';
 import 'pages/bellylog/homepage_bellylog.dart';
 import 'pages/bellylog/log_bowel_movements.dart';
@@ -99,20 +98,19 @@ class MyApp extends StatelessWidget {
 
             '/bellylog': (context) => const AppStartPage(),
 
-            '/dashboard': (context) => const Dashboard(),
+            '/ai_insights_bellylog': (context) => const AITest(),
 
             '/log_meal': (context) => const LogMeal(),
 
-            '/view_meal_logs': (context) => const ViewMealLogs(),
+            '/view_meals': (context) => const ViewMealLogs(),
 
             '/log_symptom': (context) => const LogSymptom(),
 
-            '/view_symptom_logs': (context) => const ViewSymptomLogs(),
+            '/view_symptoms': (context) => const ViewSymptomLogs(),
 
             '/log_bowel_movement': (context) => const LogBowelMovement(),
 
-            '/view_bowel_movement_logs': (context) =>
-                const ViewBowelMovementLogs(),
+            '/view_bowel_movements': (context) => const ViewBowelMovementLogs(),
 
             '/log_daily_checkin': (context) => LogDailyCheckin(),
 

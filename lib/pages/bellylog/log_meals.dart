@@ -67,6 +67,12 @@ class _LogMealState extends State<LogMeal> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/bellylog');
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         title: const Text(
           'Log Meal',
           style: TextStyle(fontWeight: FontWeight.bold),

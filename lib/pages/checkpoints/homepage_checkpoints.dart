@@ -1,3 +1,4 @@
+import 'package:aletheia/utilities/dark_mode_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:aletheia/pages/checkpoints/tasks.dart';
 
@@ -22,6 +23,32 @@ class _HomepageCheckpointsState extends State<HomepageCheckpoints> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+
+        //pinned: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Logout',
+        ),
+
+        title: Text(
+          'Checkpoints',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            letterSpacing: 8,
+          ),
+        ),
+
+        centerTitle: true,
+
+        actions: const [DarkModeSwitcher(), SizedBox(width: 8)],
+      ),
       body: IndexedStack(index: currentIndex, children: _screens),
 
       bottomNavigationBar: NavigationBar(

@@ -355,7 +355,7 @@ class _ToDoPageState extends State<ToDoPage> {
                       ),
                     ),
 
-                    const DarkModeSwitcher(),
+                    //const DarkModeSwitcher(),
                   ],
                 ),
               ),
