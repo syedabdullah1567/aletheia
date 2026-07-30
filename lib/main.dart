@@ -1,6 +1,7 @@
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
 import 'package:aletheia/pages/ai/ai_test.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'pages/module_selector.dart';
 import 'pages/bellylog/homepage_bellylog.dart';
 import 'pages/bellylog/log_bowel_movements.dart';
@@ -28,8 +29,10 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  NotifyTasks().initNotification();
-  NotifyTasks().requestAndroidPermissions();
+  // NotifyTasks().initNotification();
+  // NotifyTasks().requestAndroidPermissions();
+
+  await dotenv.load(fileName: ".env");
 
   runApp(const MyApp());
 }
