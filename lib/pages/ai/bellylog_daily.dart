@@ -130,7 +130,9 @@ $bowelsJson
                 // Result Card
                 Card(
                   elevation: 0,
-                  color: theme.colorScheme.secondaryContainer.withOpacity(0.4),
+                  color: theme.colorScheme.secondaryContainer.withValues(
+                    alpha: 0.4,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),

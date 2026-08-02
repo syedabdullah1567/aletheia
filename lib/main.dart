@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:aletheia/pages/ai/bellylog_daily.dart';
 import 'package:aletheia/pages/ai/bellylog_weekly.dart';
 import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
 import 'package:aletheia/pages/ai/ai_test.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'pages/module_selector.dart';
 import 'pages/bellylog/homepage_bellylog.dart';
@@ -15,7 +18,6 @@ import 'pages/bellylog/view_bowel_movements.dart';
 import 'pages/bellylog/view_daily_checkins.dart';
 import 'pages/bellylog/view_meals.dart';
 import 'pages/bellylog/view_symptoms.dart';
-import '/pages/notifications.dart';
 import '/utilities/value_notifier.dart';
 import 'package:aletheia/pages/checkpoints/homepage_checkpoints.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +34,18 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  NotifyTasks().initNotification();
-  NotifyTasks().requestAndroidPermissions();
+  //NotifyTasks().initNotification();
+  //NotifyTasks().requestAndroidPermissions();
 
   await dotenv.load(fileName: ".env");
+
+  if (Platform.isAndroid) {
+    try {
+      await FlutterDisplayMode.setHighRefreshRate();
+    } catch (e) {
+      debugPrint("Failed to set high refresh rate: $e");
+    }
+  }
 
   runApp(const MyApp());
 }
