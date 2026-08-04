@@ -1,6 +1,6 @@
 import 'package:aletheia/data/bellylog_database.dart';
 import 'package:aletheia/utilities/bellylog/belly_summary_card.dart';
-import 'package:aletheia/utilities/bellylog/bellylog_card.dart';
+import 'package:aletheia/utilities/homepages_card.dart';
 import 'package:aletheia/utilities/bellylog/insights_card.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';

@@ -12,9 +12,6 @@ class DarkModeSwitcher extends StatelessWidget {
         return IconButton(
           onPressed: () {
             isDarkModeNotifier.value = !isDarkModeNotifier.value;
-
-            db.isDark = isDarkModeNotifier.value;
-            db.updateIsDark();
           },
 
           icon: Icon(value ? Icons.dark_mode : Icons.light_mode),

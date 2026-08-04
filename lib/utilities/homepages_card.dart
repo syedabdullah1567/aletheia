@@ -38,14 +38,13 @@ class BellyLogCard extends StatelessWidget {
                   child: Container(
                     width: 20,
                     height: 20,
-                    decoration: BoxDecoration(
-                      color: colors.primaryContainer,
-                      shape: BoxShape.circle,
-                    ),
+                    // decoration: BoxDecoration(
+                    //   color: colors.primaryContainer,
+                    //   shape: BoxShape.circle,
+                    // ),
                     child: Icon(icon, color: colors.primary),
                   ),
                 ),
-
                 const Spacer(),
                 Text(
                   title,

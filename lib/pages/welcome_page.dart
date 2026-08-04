@@ -123,17 +123,16 @@ class WelcomePage extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                // AI button
                 SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: FilledButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/bellylog_weekly_insight');
+                      Navigator.pushNamed(context, '/palimora_homepage');
                     },
                     icon: const Icon(Icons.chat),
                     label: const Text(
-                      'Get Weekly Analysis',
+                      'Enter Palimora',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
