@@ -5,7 +5,9 @@ import 'package:aletheia/pages/ai/bellylog_weekly.dart';
 import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
+import 'package:aletheia/pages/palimora/journal_entry.dart';
 import 'package:aletheia/pages/palimora/palimora_homepage.dart';
+import 'package:aletheia/pages/palimora/view_logs_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -141,6 +143,10 @@ class MyApp extends StatelessWidget {
             '/palimora_homepage': (context) => PalimoraHomepage(),
 
             '/palimora_daily_log': (context) => DailyLog(),
+
+            '/palimora_dashboard': (context) => ViewLogsPage(),
+
+            '/journal_entry': (context) => JournalEntry(),
           },
         );
       },

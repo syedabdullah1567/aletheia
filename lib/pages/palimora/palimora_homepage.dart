@@ -1,6 +1,5 @@
 import 'package:aletheia/data/palimora_database.dart';
 import 'package:aletheia/utilities/homepages_card.dart';
-import 'package:aletheia/utilities/hero_widget.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -41,57 +40,45 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // // --- 2 CARDS SIDE-BY-SIDE ---
-              // SizedBox(
-              //   height: 130,
-              //   child: Row(
-              //     children: [
-              //       Expanded(
-              //         child: HomepageCard(
-              //           icon: Icons.analytics,
-              //           title: 'Analytics',
-              //           onTap: () {},
-              //         ),
-              //       ),
-              //       const SizedBox(width: 12),
-              //       Expanded(
-              //         // child: HomepageCard(
-              //         //   icon: Icons.abc,
-              //         //   title: 'Hello',
-              //         //   onTap: () {},
-              //         // ),
-              //         child: BellyLogCard(
-              //           icon: Icons.analytics,
-              //           title: 'Analytics',
-              //           onTap: () {},
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              const SizedBox(height: 250),
+              const SizedBox(height: 100),
 
-              // --- 1 FULL-WIDTH CARD ---
+              // Collection IF + Spread operator for multiple widgets
+              if (!db.hasLogged) ...[
+                SizedBox(
+                  height: 150,
+                  child: HomepagesCard(
+                    icon: Icons.accessibility_new_rounded,
+                    title: 'Start Daily Log',
+                    onTap: () async {
+                      await Navigator.pushNamed(context, '/palimora_daily_log');
+                      setState(() {
+                        db.loadData(0);
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 50),
+              ],
+
               SizedBox(
                 height: 150,
-                child: BellyLogCard(
-                  icon: Icons.accessibility_new_rounded,
-                  title: 'Start Daily Log',
-                  onTap: () =>
-                      Navigator.pushNamed(context, '/palimora_daily_log'),
+                child: HomepagesCard(
+                  icon: Icons.text_snippet_rounded,
+                  title: 'Enter a journal entry',
+                  onTap: () => Navigator.pushNamed(context, '/journal_entry'),
                 ),
               ),
+              const SizedBox(height: 50),
 
-              const SizedBox(height: 100),
               SizedBox(
                 height: 150,
-                child: BellyLogCard(
+                child: HomepagesCard(
                   icon: Icons.analytics,
                   title: 'View Dashboard',
-                  onTap: () {},
+                  onTap: () =>
+                      Navigator.pushNamed(context, '/palimora_dashboard'),
                 ),
               ),
-
               const SizedBox(height: 24),
             ],
           ),

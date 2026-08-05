@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class BellyLogCard extends StatelessWidget {
+class HomepagesCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final VoidCallback onTap;
 
-  const BellyLogCard({
+  const HomepagesCard({
     super.key,
     required this.icon,
     required this.title,
@@ -35,7 +35,7 @@ class BellyLogCard extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.topRight,
-                  child: Container(
+                  child: SizedBox(
                     width: 20,
                     height: 20,
                     // decoration: BoxDecoration(

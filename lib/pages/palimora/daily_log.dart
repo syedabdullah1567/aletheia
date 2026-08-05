@@ -11,7 +11,7 @@ class DailyLog extends StatefulWidget {
   State<DailyLog> createState() => _DailyLogState();
 }
 
-enum CheckInStep { mood, pillars, complete }
+enum CheckInStep { mood, sleep, pillars, complete }
 
 class _DailyLogState extends State<DailyLog> {
   final _myBox = Hive.box('MyBox');
@@ -22,6 +22,11 @@ class _DailyLogState extends State<DailyLog> {
   String? _selectedMood;
 
   Map<String, double> pillarRatings = {};
+
+  final TextEditingController _sleepController = TextEditingController();
+  double hoursSlept = 0.0;
+
+  double qualityOfSleep = 0;
 
   @override
   void initState() {
@@ -39,11 +44,18 @@ class _DailyLogState extends State<DailyLog> {
       db.loadData(1);
     }
 
-    if (_myBox.get('PILLARRATINGS') == null) {
+    if (_myBox.get('SLEEP') == null) {
       db.createInitialData(2);
       db.updateDataBase(2);
     } else {
       db.loadData(2);
+    }
+
+    if (_myBox.get('PILLARRATINGS') == null) {
+      db.createInitialData(3);
+      db.updateDataBase(3);
+    } else {
+      db.loadData(3);
     }
     super.initState();
   }
@@ -84,6 +96,9 @@ class _DailyLogState extends State<DailyLog> {
     setState(() {
       switch (_currentStep) {
         case CheckInStep.mood:
+          _currentStep = CheckInStep.sleep;
+          break;
+        case CheckInStep.sleep:
           _currentStep = CheckInStep.pillars;
           break;
         case CheckInStep.pillars:
@@ -103,18 +118,23 @@ class _DailyLogState extends State<DailyLog> {
     ).format(DateTime.now());
 
     db.moods[timestampKey] = _selectedMood ?? 'Neutral';
+    db.sleep[timestampKey] = {
+      'hoursSlept': hoursSlept,
+      'qualityOfSleep': qualityOfSleep,
+    };
     db.pillarRatings[timestampKey] = pillarRatings;
 
     db.updateDataBase(1); // Saves 'MOODS'
-    db.updateDataBase(2); // Saves 'PILLARRATINGS'
+    db.updateDataBase(2); // Saves 'SLEEP'
+    db.updateDataBase(3); // Saves 'PILLARRATINGS'
     db.hasLogged = true;
     db.updateDataBase(0); // Saves 'HASLOGGED'
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    //final theme = Theme.of(context);
+    //final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: UniformAppbar(
         leadIcon: Icon(Icons.arrow_back_rounded),
@@ -172,6 +192,56 @@ class _DailyLogState extends State<DailyLog> {
     );
   }
 
+  // 3. Updated _buildSleepSelector implementation:
+  Widget _buildHoursOfSleepSelector() {
+    return SizedBox(
+      width: 200, // Keeps the input centered and neat
+      child: TextField(
+        controller: _sleepController,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        decoration: InputDecoration(
+          hintText: '8.0',
+          suffixText: 'hrs',
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+        ),
+        onChanged: (value) {
+          setState(() {
+            // Parse string input to double safely
+            hoursSlept = double.tryParse(value) ?? 0.0;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildQualityOfSleepSelector() {
+    final List<double> qualities = [1, 2, 3, 4, 5];
+
+    return Wrap(
+      spacing: 12.0,
+      children: qualities.map((quality) {
+        final isSelected = qualityOfSleep == quality;
+        return ChoiceChip(
+          label: Text(quality.toInt().toString()),
+          selected: isSelected,
+          onSelected: (bool selected) {
+            setState(() {
+              if (selected) {
+                qualityOfSleep = quality;
+              }
+            });
+          },
+        );
+      }).toList(),
+    );
+  }
+
   Widget _buildPillarRatingSelector(String index) {
     final List<double> ratings = [1, 2, 3, 4, 5];
 
@@ -207,6 +277,31 @@ class _DailyLogState extends State<DailyLog> {
           ),
           const SizedBox(height: 50),
           _buildMoodSelector(),
+        ],
+      ),
+
+      CheckInStep.sleep => Column(
+        key: const ValueKey('sleep_step'), // Unique key
+        children: [
+          const Text(
+            'How many hours did you sleep today?',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 50),
+          _buildHoursOfSleepSelector(),
+          const SizedBox(height: 100),
+          const Text(
+            'How would you rate your overall sleep quality?',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 50),
+          _buildQualityOfSleepSelector(),
+
+          const SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () => nextStep(), // ✅ Exits the flow
+            child: const Text('Next'),
+          ),
         ],
       ),
 

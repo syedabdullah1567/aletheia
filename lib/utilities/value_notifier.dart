@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../data/darkmode_database.dart';
 
 // Check if system brightness is dark at the time of initialization
 final bool isSystemDark =

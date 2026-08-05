@@ -36,7 +36,7 @@ class _ModuleSelectorState extends State<ModuleSelector> {
                     children: [
                       // Header
                       Text(
-                        'Welcome back.',
+                        'Your journey awaits you.',
                         style: theme.textTheme.displaySmall?.copyWith(
                           fontWeight: FontWeight.w700,
                           height: 1.1,
