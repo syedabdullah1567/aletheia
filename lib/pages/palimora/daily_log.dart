@@ -124,11 +124,11 @@ class _DailyLogState extends State<DailyLog> {
     };
     db.pillarRatings[timestampKey] = pillarRatings;
 
+    // Save entries to Hive
     db.updateDataBase(1); // Saves 'MOODS'
     db.updateDataBase(2); // Saves 'SLEEP'
     db.updateDataBase(3); // Saves 'PILLARRATINGS'
-    db.hasLogged = true;
-    db.updateDataBase(0); // Saves 'HASLOGGED'
+    db.updateDataBase(0); // Saves current cycle key to 'LAST_LOGGED_CYCLE'
   }
 
   @override

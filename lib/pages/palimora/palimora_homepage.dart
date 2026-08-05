@@ -50,16 +50,16 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
                     icon: Icons.accessibility_new_rounded,
                     title: 'Start Daily Log',
                     onTap: () async {
+                      // Wait for user to complete the log
                       await Navigator.pushNamed(context, '/palimora_daily_log');
-                      setState(() {
-                        db.loadData(0);
-                      });
+
+                      // Rebuild Homepage - db.hasLogged automatically evaluates to true!
+                      setState(() {});
                     },
                   ),
                 ),
                 const SizedBox(height: 50),
               ],
-
               SizedBox(
                 height: 150,
                 child: HomepagesCard(
