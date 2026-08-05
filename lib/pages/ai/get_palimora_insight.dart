@@ -26,6 +26,7 @@ class _GetPalimoraInsightState extends State<GetPalimoraInsight> {
           - Respond in plain English.
           - Do not use Markdown, headings, tables or code blocks.
           - You may use only bullet points and text formatting of the form that could be understood by a very basic flutter text display.
+          - Keep your analysis concise and under 500 words total.        
           """;
 
   final PalimoraDatabase db = PalimoraDatabase();
@@ -90,20 +91,20 @@ class _GetPalimoraInsightState extends State<GetPalimoraInsight> {
     // 4. Construct prompt payload for Gemini
     final String textToSend =
         '''
-Here is the user's logged data for today (${db.currentCycleKey}). Please analyze it according to your instructions.
+        Here is the user's logged data for today (${db.currentCycleKey}). Please analyze it according to your instructions.
 
---- MOODS LOGGED ---
-$moodsJson
+        --- MOODS LOGGED ---
+        $moodsJson
 
---- SLEEP METRICS ---
-$sleepJson
+        --- SLEEP METRICS ---
+        $sleepJson
 
---- PILLAR RATINGS ---
-$pillarsJson
+        --- PILLAR RATINGS ---
+        $pillarsJson
 
---- JOURNAL ENTRIES ---
-$journalJson
-''';
+        --- JOURNAL ENTRIES ---
+        $journalJson
+        ''';
 
     // 5. Send to AI
     String theAnswer = await getGeminiResponse(systemInstruction, textToSend);

@@ -14,12 +14,13 @@ Future<String> getGeminiResponse(
 ) async {
   final apiKey = dotenv.env['GEMINI_API_KEY'];
 
+  print(apiKey);
+
   if (apiKey == null || apiKey.isEmpty) {
     return 'Gemini API key not found.';
   }
 
-  // Model name - ensure key is appended as a query parameter
-  const String modelName = 'gemini-1.5-pro';
+  const String modelName = 'gemini-3.6-flash';
   final String endPoint =
       'https://generativelanguage.googleapis.com/v1beta/models/$modelName:generateContent?key=$apiKey';
 
@@ -28,17 +29,9 @@ Future<String> getGeminiResponse(
         .post(
           Uri.parse(endPoint),
           headers: {'Content-Type': 'application/json'},
-          // body: jsonEncode({
-          //   "contents": [
-          //     {
-          //       "parts": [
-          //         {"text": userInput},
-          //       ],
-          //     },
-          //   ],
-          // }),
           body: jsonEncode({
-            "systemInstruction": {
+            // 1. Fixed snake_case key
+            "system_instruction": {
               "parts": [
                 {"text": systemInstruction},
               ],
@@ -51,12 +44,14 @@ Future<String> getGeminiResponse(
                 ],
               },
             ],
-            "generationConfig": {
+            // 2. Fixed snake_case key
+            "generation_config": {
               "temperature": 0.2,
               "topP": 0.9,
-              "maxOutputTokens": 500,
+              "maxOutputTokens": 2048,
             },
-            "safetySettings": [
+            // 3. Fixed snake_case key
+            "safety_settings": [
               {
                 "category": "HARM_CATEGORY_HARASSMENT",
                 "threshold": "BLOCK_ONLY_HIGH",
@@ -81,7 +76,7 @@ Future<String> getGeminiResponse(
     if (response.statusCode != 200) {
       switch (response.statusCode) {
         case 400:
-          return "Invalid request formatting.";
+          return "Invalid request formatting. (${response.body})";
         case 401:
         case 403:
           return "Invalid Gemini API key or access denied.";
@@ -91,7 +86,7 @@ Future<String> getGeminiResponse(
         case 503:
           return "Gemini is temporarily unavailable.";
         default:
-          return "Request failed (${response.statusCode}).";
+          return "Request failed (${response.statusCode}): ${response.body}";
       }
     }
 

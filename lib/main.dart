@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:aletheia/pages/ai/bellylog_daily.dart';
 import 'package:aletheia/pages/ai/bellylog_weekly.dart';
+import 'package:aletheia/pages/ai/get_palimora_insight.dart';
+import 'package:aletheia/pages/ai/weekly_insight_page.dart';
 import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
@@ -150,6 +152,10 @@ class MyApp extends StatelessWidget {
             '/journal_entry': (context) => JournalEntry(),
 
             '/view_journal_entries': (context) => ViewJournalEntriesPage(),
+
+            '/get_palimora_insight': (context) => GetPalimoraInsight(),
+
+            '/weekly_insight_page': (context) => WeeklyInsightPage(),
           },
         );
       },
