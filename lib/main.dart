@@ -6,6 +6,7 @@ import 'package:aletheia/pages/ai/get_palimora_insight.dart';
 import 'package:aletheia/pages/ai/weekly_insight_page.dart';
 import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
+import 'package:aletheia/pages/notifications.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
 import 'package:aletheia/pages/palimora/journal_entry.dart';
 import 'package:aletheia/pages/palimora/palimora_homepage.dart';
@@ -40,8 +41,8 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  //NotifyTasks().initNotification();
-  //NotifyTasks().requestAndroidPermissions();
+  NotifyTasks().initNotification();
+  NotifyTasks().requestAndroidPermissions();
 
   await dotenv.load(fileName: ".env");
 
