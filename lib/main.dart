@@ -7,6 +7,7 @@ import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
 import 'package:aletheia/pages/palimora/journal_entry.dart';
 import 'package:aletheia/pages/palimora/palimora_homepage.dart';
+import 'package:aletheia/pages/palimora/view_journal_entries.dart';
 import 'package:aletheia/pages/palimora/view_logs_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -147,6 +148,8 @@ class MyApp extends StatelessWidget {
             '/palimora_dashboard': (context) => ViewLogsPage(),
 
             '/journal_entry': (context) => JournalEntry(),
+
+            '/view_journal_entries': (context) => ViewJournalEntriesPage(),
           },
         );
       },
