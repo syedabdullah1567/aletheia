@@ -1,6 +1,6 @@
 import 'package:aletheia/data/bellylog_database.dart';
 import 'package:aletheia/utilities/bellylog/belly_summary_card.dart';
-import 'package:aletheia/utilities/bellylog/bellylog_card.dart';
+import 'package:aletheia/utilities/homepages_card.dart';
 import 'package:aletheia/utilities/bellylog/insights_card.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
@@ -85,55 +85,55 @@ class _AppStartPageState extends State<AppStartPage> {
               padding: EdgeInsets.fromLTRB(20, 0, 20, 40),
               sliver: SliverGrid(
                 delegate: SliverChildListDelegate([
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.restaurant_rounded,
                     title: "Log Meal",
                     onTap: () => _openPage(context, '/log_meal'),
                   ),
 
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.menu_book_rounded,
                     title: "View Meals",
 
                     onTap: () => _openPage(context, '/view_meals'),
                   ),
 
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.monitor_heart_outlined,
                     title: "Log Symptoms",
 
                     onTap: () => _openPage(context, '/log_symptom'),
                   ),
 
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.analytics_outlined,
                     title: "View Symptoms",
 
                     onTap: () => _openPage(context, '/view_symptoms'),
                   ),
 
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.wc_rounded,
                     title: "Log Bathroom Visits",
 
                     onTap: () => _openPage(context, '/log_bowel_movement'),
                   ),
 
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.list_alt_rounded,
                     title: "View Bathroom Visits",
 
                     onTap: () => _openPage(context, '/view_bowel_movements'),
                   ),
 
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.today_rounded,
                     title: "Daily Check-in",
 
                     onTap: () => _openPage(context, '/log_daily_checkin'),
                   ),
 
-                  BellyLogCard(
+                  HomepagesCard(
                     icon: Icons.calendar_month_rounded,
                     title: "View Check-ins",
 
