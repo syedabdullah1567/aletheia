@@ -128,11 +128,11 @@ class WelcomePage extends StatelessWidget {
                   height: 56,
                   child: FilledButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/palimora_homepage');
+                      Navigator.pushNamed(context, '/weekly_insight_page');
                     },
                     icon: const Icon(Icons.chat),
                     label: const Text(
-                      'Enter Palimora',
+                      'Generate a weekly analysis of your life',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

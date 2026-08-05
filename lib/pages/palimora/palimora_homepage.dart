@@ -79,6 +79,31 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
                       Navigator.pushNamed(context, '/palimora_dashboard'),
                 ),
               ),
+
+              const SizedBox(height: 50),
+
+              SizedBox(
+                height: 150,
+                child: HomepagesCard(
+                  icon: Icons.analytics,
+                  title: 'View Journals',
+                  onTap: () =>
+                      Navigator.pushNamed(context, '/view_journal_entries'),
+                ),
+              ),
+
+              const SizedBox(height: 50),
+
+              SizedBox(
+                height: 150,
+                child: HomepagesCard(
+                  icon: Icons.analytics,
+                  title: 'Get Palimora Insights',
+                  onTap: () =>
+                      Navigator.pushNamed(context, '/get_palimora_insight'),
+                ),
+              ),
+
               const SizedBox(height: 24),
             ],
           ),

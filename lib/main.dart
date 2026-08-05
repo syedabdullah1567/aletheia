@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:aletheia/pages/ai/bellylog_daily.dart';
 import 'package:aletheia/pages/ai/bellylog_weekly.dart';
+import 'package:aletheia/pages/ai/get_palimora_insight.dart';
+import 'package:aletheia/pages/ai/weekly_insight_page.dart';
 import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
+import 'package:aletheia/pages/notifications.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
 import 'package:aletheia/pages/palimora/journal_entry.dart';
 import 'package:aletheia/pages/palimora/palimora_homepage.dart';
+import 'package:aletheia/pages/palimora/view_journal_entries.dart';
 import 'package:aletheia/pages/palimora/view_logs_page.dart';
 import 'package:aletheia/pages/welcome_page.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -37,8 +41,8 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  //NotifyTasks().initNotification();
-  //NotifyTasks().requestAndroidPermissions();
+  NotifyTasks().initNotification();
+  NotifyTasks().requestAndroidPermissions();
 
   await dotenv.load(fileName: ".env");
 
@@ -147,6 +151,12 @@ class MyApp extends StatelessWidget {
             '/palimora_dashboard': (context) => ViewLogsPage(),
 
             '/journal_entry': (context) => JournalEntry(),
+
+            '/view_journal_entries': (context) => ViewJournalEntriesPage(),
+
+            '/get_palimora_insight': (context) => GetPalimoraInsight(),
+
+            '/weekly_insight_page': (context) => WeeklyInsightPage(),
           },
         );
       },

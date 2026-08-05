@@ -8,15 +8,19 @@ String cleanGeminiResponse(String text) {
   return text.replaceAll('**', '').trim();
 }
 
-Future<String> getGeminiResponse(String userInput) async {
+Future<String> getGeminiResponse(
+  String systemInstruction,
+  String userInput,
+) async {
   final apiKey = dotenv.env['GEMINI_API_KEY'];
+
+  print(apiKey);
 
   if (apiKey == null || apiKey.isEmpty) {
     return 'Gemini API key not found.';
   }
 
-  // Model name - ensure key is appended as a query parameter
-  const String modelName = 'gemini-3.5-flash-lite';
+  const String modelName = 'gemini-3.6-flash';
   final String endPoint =
       'https://generativelanguage.googleapis.com/v1beta/models/$modelName:generateContent?key=$apiKey';
 
@@ -25,38 +29,11 @@ Future<String> getGeminiResponse(String userInput) async {
         .post(
           Uri.parse(endPoint),
           headers: {'Content-Type': 'application/json'},
-          // body: jsonEncode({
-          //   "contents": [
-          //     {
-          //       "parts": [
-          //         {"text": userInput},
-          //       ],
-          //     },
-          //   ],
-          // }),
           body: jsonEncode({
-            "systemInstruction": {
+            // 1. Fixed snake_case key
+            "system_instruction": {
               "parts": [
-                {
-                  "text": """
-          You are BellyLog, an AI digestive health assistant inside the Aletheia app.
-
-          Your job is to analyze the user's BellyLog records and identify meaningful patterns.
-
-          Rules:
-          - Never diagnose diseases.
-          - Never recommend medication.
-          - Never claim certainty when there is insufficient evidence.
-          - Base every observation only on the provided data.
-          - If no obvious pattern exists, clearly state that.
-          - Mention possible food-symptom relationships only when supported by the data.
-          - End with 2-3 practical observations the user can monitor over the next few days.
-          - Keep the response under 300 words.
-          - Respond in plain English.
-          - Do not use Markdown, headings, tables or code blocks.
-          - You may use only bullet points and text formatting of the form that could be understood by a very basic flutter text display
-          """,
-                },
+                {"text": systemInstruction},
               ],
             },
             "contents": [
@@ -67,12 +44,14 @@ Future<String> getGeminiResponse(String userInput) async {
                 ],
               },
             ],
-            "generationConfig": {
+            // 2. Fixed snake_case key
+            "generation_config": {
               "temperature": 0.2,
               "topP": 0.9,
-              "maxOutputTokens": 500,
+              "maxOutputTokens": 2048,
             },
-            "safetySettings": [
+            // 3. Fixed snake_case key
+            "safety_settings": [
               {
                 "category": "HARM_CATEGORY_HARASSMENT",
                 "threshold": "BLOCK_ONLY_HIGH",
@@ -97,7 +76,7 @@ Future<String> getGeminiResponse(String userInput) async {
     if (response.statusCode != 200) {
       switch (response.statusCode) {
         case 400:
-          return "Invalid request formatting.";
+          return "Invalid request formatting. (${response.body})";
         case 401:
         case 403:
           return "Invalid Gemini API key or access denied.";
@@ -107,7 +86,7 @@ Future<String> getGeminiResponse(String userInput) async {
         case 503:
           return "Gemini is temporarily unavailable.";
         default:
-          return "Request failed (${response.statusCode}).";
+          return "Request failed (${response.statusCode}): ${response.body}";
       }
     }
 
