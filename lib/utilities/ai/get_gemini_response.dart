@@ -8,7 +8,10 @@ String cleanGeminiResponse(String text) {
   return text.replaceAll('**', '').trim();
 }
 
-Future<String> getGeminiResponse(String userInput) async {
+Future<String> getGeminiResponse(
+  String systemInstruction,
+  String userInput,
+) async {
   final apiKey = dotenv.env['GEMINI_API_KEY'];
 
   if (apiKey == null || apiKey.isEmpty) {
@@ -16,7 +19,7 @@ Future<String> getGeminiResponse(String userInput) async {
   }
 
   // Model name - ensure key is appended as a query parameter
-  const String modelName = 'gemini-3.5-flash-lite';
+  const String modelName = 'gemini-1.5-pro';
   final String endPoint =
       'https://generativelanguage.googleapis.com/v1beta/models/$modelName:generateContent?key=$apiKey';
 
@@ -37,26 +40,7 @@ Future<String> getGeminiResponse(String userInput) async {
           body: jsonEncode({
             "systemInstruction": {
               "parts": [
-                {
-                  "text": """
-          You are BellyLog, an AI digestive health assistant inside the Aletheia app.
-
-          Your job is to analyze the user's BellyLog records and identify meaningful patterns.
-
-          Rules:
-          - Never diagnose diseases.
-          - Never recommend medication.
-          - Never claim certainty when there is insufficient evidence.
-          - Base every observation only on the provided data.
-          - If no obvious pattern exists, clearly state that.
-          - Mention possible food-symptom relationships only when supported by the data.
-          - End with 2-3 practical observations the user can monitor over the next few days.
-          - Keep the response under 300 words.
-          - Respond in plain English.
-          - Do not use Markdown, headings, tables or code blocks.
-          - You may use only bullet points and text formatting of the form that could be understood by a very basic flutter text display
-          """,
-                },
+                {"text": systemInstruction},
               ],
             },
             "contents": [
