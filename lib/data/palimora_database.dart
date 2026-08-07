@@ -81,7 +81,7 @@ class PalimoraDatabase {
 
   void updateDataBase(int num) {
     if (num == 0) {
-      markAsLogged(); // Saves the current cycle key to Hive
+      markAsLogged();
     } else if (num == 1) {
       _myBox.put('MOODS', moods);
     } else if (num == 2) {

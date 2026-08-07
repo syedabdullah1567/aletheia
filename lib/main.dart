@@ -41,8 +41,8 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  NotifyTasks().initNotification();
-  NotifyTasks().requestAndroidPermissions();
+  //NotifyTasks().initNotification();
+  //NotifyTasks().requestAndroidPermissions();
 
   await dotenv.load(fileName: ".env");
 

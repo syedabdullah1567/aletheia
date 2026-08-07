@@ -3,6 +3,7 @@ import 'package:aletheia/utilities/checkpoints/buttons.dart';
 import 'package:aletheia/utilities/custom_date_time.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 class JournalEntry extends StatefulWidget {
@@ -14,8 +15,14 @@ class JournalEntry extends StatefulWidget {
 
 class _JournalEntryState extends State<JournalEntry> {
   final TextEditingController _controller = TextEditingController();
-
+  final myBox = Hive.box('MyBox');
   final PalimoraDatabase db = PalimoraDatabase();
+
+  @override
+  void initState() {
+    super.initState();
+    db.loadData(4);
+  }
 
   @override
   void dispose() {
@@ -24,6 +31,7 @@ class _JournalEntryState extends State<JournalEntry> {
   }
 
   void saveJournalEntry(DateTime currentTime, String entry) {
+    print(currentTime);
     if (entry == '') {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
