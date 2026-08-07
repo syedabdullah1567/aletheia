@@ -31,7 +31,6 @@ class _JournalEntryState extends State<JournalEntry> {
   }
 
   void saveJournalEntry(DateTime currentTime, String entry) {
-    print(currentTime);
     if (entry == '') {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(

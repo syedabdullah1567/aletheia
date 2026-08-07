@@ -17,8 +17,6 @@ Future<String> getGeminiResponse(
 ) async {
   final apiKey = dotenv.env['GEMINI_API_KEY'];
 
-  print(apiKey);
-
   if (apiKey == null || apiKey.isEmpty) {
     return 'Gemini API key not found.';
   }
@@ -103,7 +101,7 @@ Future<String> getGeminiResponse(
     final candidate = candidates.first as Map<String, dynamic>;
     final finishReason = candidate["finishReason"];
 
-    print("Finish reason: $finishReason");
+    // print("Finish reason: $finishReason");
 
     if (finishReason == "SAFETY") {
       return "The response was blocked by Gemini's safety filters.";
