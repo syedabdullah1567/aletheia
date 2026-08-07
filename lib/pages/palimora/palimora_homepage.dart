@@ -14,19 +14,15 @@ class PalimoraHomepage extends StatefulWidget {
 class _PalimoraHomepageState extends State<PalimoraHomepage> {
   final _myBox = Hive.box('MyBox');
   final PalimoraDatabase db = PalimoraDatabase();
-
   @override
   void initState() {
     super.initState();
-    if (_myBox.get('HASLOGGED') == null) {
-      db.createInitialData(0);
-    } else {
-      db.loadData(0);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: UniformAppbar(
         leadIcon: const Icon(Icons.arrow_back_rounded),
@@ -36,54 +32,56 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
       body: SafeArea(
         child: SingleChildScrollView(
           // Protects against overflow on smaller phones
-          padding: const EdgeInsets.fromLTRB(60, 20, 60, 40),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 100),
+              //const SizedBox(height: 100),
 
               // Collection IF + Spread operator for multiple widgets
               if (!db.hasLogged) ...[
                 SizedBox(
-                  height: 150,
+                  height: 140,
                   child: HomepagesCard(
                     icon: Icons.accessibility_new_rounded,
                     title: 'Start Daily Log',
                     onTap: () async {
-                      // Wait for user to complete the log
-                      await Navigator.pushNamed(context, '/palimora_daily_log');
-
+                      // Wait for user to finish or leave the logging flow
+                      final completed = await Navigator.pushNamed(
+                        context,
+                        '/palimora_daily_log',
+                      );
                       // Rebuild Homepage - db.hasLogged automatically evaluates to true!
-                      setState(() {});
+                      if (completed == true || db.hasLogged) setState(() {});
                     },
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
               ],
+
               SizedBox(
-                height: 150,
+                height: 140,
+                child: HomepagesCard(
+                  icon: Icons.analytics,
+                  title: 'View Daily Log',
+                  onTap: () =>
+                      Navigator.pushNamed(context, '/palimora_dashboard'),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 140,
                 child: HomepagesCard(
                   icon: Icons.text_snippet_rounded,
                   title: 'Enter a journal entry',
                   onTap: () => Navigator.pushNamed(context, '/journal_entry'),
                 ),
               ),
-              const SizedBox(height: 50),
+
+              const SizedBox(height: 20),
 
               SizedBox(
-                height: 150,
-                child: HomepagesCard(
-                  icon: Icons.analytics,
-                  title: 'View Dashboard',
-                  onTap: () =>
-                      Navigator.pushNamed(context, '/palimora_dashboard'),
-                ),
-              ),
-
-              const SizedBox(height: 50),
-
-              SizedBox(
-                height: 150,
+                height: 140,
                 child: HomepagesCard(
                   icon: Icons.analytics,
                   title: 'View Journals',
@@ -92,10 +90,10 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
                 ),
               ),
 
-              const SizedBox(height: 50),
+              const SizedBox(height: 20),
 
               SizedBox(
-                height: 150,
+                height: 140,
                 child: HomepagesCard(
                   icon: Icons.analytics,
                   title: 'Get Palimora Insights',
@@ -103,8 +101,16 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
                       Navigator.pushNamed(context, '/get_palimora_insight'),
                 ),
               ),
-
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
+              Center(
+                child: Text(
+                  'Discover the pieces that form you.',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.65),
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 class DailyLog extends StatefulWidget {
   const DailyLog({super.key});
@@ -11,7 +12,17 @@ class DailyLog extends StatefulWidget {
   State<DailyLog> createState() => _DailyLogState();
 }
 
-enum CheckInStep { mood, sleep, pillars, complete }
+enum CheckInStep {
+  mood,
+  sleep,
+  pillars1,
+  pillars2,
+  pillars3,
+  pillars4,
+  pillars5,
+  pillars6,
+  complete,
+}
 
 class _DailyLogState extends State<DailyLog> {
   final _myBox = Hive.box('MyBox');
@@ -24,19 +35,11 @@ class _DailyLogState extends State<DailyLog> {
   Map<String, double> pillarRatings = {};
 
   final TextEditingController _sleepController = TextEditingController();
-  double hoursSlept = 0.0;
-
+  double hoursSlept = -1;
   double qualityOfSleep = 0;
 
   @override
   void initState() {
-    if (_myBox.get('HASLOGGED') == null) {
-      db.createInitialData(0);
-      db.updateDataBase(0);
-    } else {
-      db.loadData(0);
-    }
-
     if (_myBox.get('MOODS') == null) {
       db.createInitialData(1);
       db.updateDataBase(1);
@@ -99,14 +102,23 @@ class _DailyLogState extends State<DailyLog> {
           _currentStep = CheckInStep.sleep;
           break;
         case CheckInStep.sleep:
-          _currentStep = CheckInStep.pillars;
+          _currentStep = CheckInStep.pillars1;
           break;
-        case CheckInStep.pillars:
+        case CheckInStep.pillars1:
+          _currentStep = CheckInStep.pillars2;
+        case CheckInStep.pillars2:
+          _currentStep = CheckInStep.pillars3;
+        case CheckInStep.pillars3:
+          _currentStep = CheckInStep.pillars4;
+        case CheckInStep.pillars4:
+          _currentStep = CheckInStep.pillars5;
+        case CheckInStep.pillars5:
+          _currentStep = CheckInStep.pillars6;
+        case CheckInStep.pillars6:
           _currentStep = CheckInStep.complete;
           saveMoodAndPillarRatings();
           break;
         case CheckInStep.complete:
-          saveMoodAndPillarRatings();
           break;
       }
     });
@@ -139,28 +151,35 @@ class _DailyLogState extends State<DailyLog> {
       appBar: UniformAppbar(
         leadIcon: Icon(Icons.arrow_back_rounded),
         titleText: '',
-        onPress: () => Navigator.pop(context),
+        onPress: () => Navigator.pop(context, false),
       ),
 
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(50, 50, 50, 50),
+          padding: EdgeInsets.all(20),
           child: Center(
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0.05, 0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0.05, 0),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: _getStepWidget(),
                   ),
-                );
-              },
-              child: _getStepWidget(),
+                ),
+              ],
             ),
           ),
         ),
@@ -182,10 +201,6 @@ class _DailyLogState extends State<DailyLog> {
             setState(() {
               _selectedMood = selected ? mood : null;
             });
-
-            if (selected) {
-              Future.delayed(const Duration(milliseconds: 10), nextStep);
-            }
           },
         );
       }).toList(),
@@ -195,10 +210,14 @@ class _DailyLogState extends State<DailyLog> {
   // 3. Updated _buildSleepSelector implementation:
   Widget _buildHoursOfSleepSelector() {
     return SizedBox(
-      width: 200, // Keeps the input centered and neat
+      width: 180,
       child: TextField(
         controller: _sleepController,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        // 1. Blocks non-numeric characters and enforces max ONE decimal point
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+        ],
         textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         decoration: InputDecoration(
@@ -212,8 +231,8 @@ class _DailyLogState extends State<DailyLog> {
         ),
         onChanged: (value) {
           setState(() {
-            // Parse string input to double safely
-            hoursSlept = double.tryParse(value) ?? 0.0;
+            // 2. If empty or invalid, fallback to -1 instead of 0.0
+            hoursSlept = double.tryParse(value) ?? -1;
           });
         },
       ),
@@ -242,22 +261,28 @@ class _DailyLogState extends State<DailyLog> {
     );
   }
 
-  Widget _buildPillarRatingSelector(String index) {
+  // Updated to accept an optional onRated callback for automatic transitions
+  Widget _buildPillarRatingSelector(String key, {VoidCallback? onRated}) {
     final List<double> ratings = [1, 2, 3, 4, 5];
 
     return Wrap(
       spacing: 12.0,
+      runSpacing: 12.0,
+      alignment: WrapAlignment.center,
       children: ratings.map((rating) {
-        final isSelected = pillarRatings[index] == rating;
+        final isSelected = pillarRatings[key] == rating;
         return ChoiceChip(
           label: Text(rating.toInt().toString()),
           selected: isSelected,
           onSelected: (bool selected) {
             setState(() {
               if (selected) {
-                pillarRatings[index] = rating;
+                pillarRatings[key] = rating;
+                if (onRated != null) {
+                  onRated();
+                }
               } else {
-                pillarRatings.remove(index);
+                pillarRatings.remove(key);
               }
             });
           },
@@ -266,18 +291,77 @@ class _DailyLogState extends State<DailyLog> {
     );
   }
 
+  // Builder helper for individual pillar steps
+  Widget _buildSinglePillarStep(int index) {
+    final pillar = _pillars[index];
+    final String key = pillar['key']!;
+    final String prompt = pillar['prompt']!;
+
+    return SingleChildScrollView(
+      key: ValueKey(
+        'pillar_step_$index',
+      ), // Unique key triggers AnimatedSwitcher
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            prompt,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          const SizedBox(height: 40),
+          _buildPillarRatingSelector(
+            key,
+            onRated: () {
+              // 150ms delay gives user visual confirmation before fading out
+              Future.delayed(const Duration(milliseconds: 150), () {
+                if (mounted) nextStep();
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _getStepWidget() {
     return switch (_currentStep) {
-      CheckInStep.mood => Column(
-        key: const ValueKey('mood_step'), // Unique key
-        children: [
-          const Text(
-            'How was your day today?',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 50),
-          _buildMoodSelector(),
-        ],
+      CheckInStep.mood => SingleChildScrollView(
+        key: const ValueKey('mood_step'), // Unique key,
+        child: Column(
+          children: [
+            const Text(
+              'How was your day today?',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 50),
+            _buildMoodSelector(),
+
+            const SizedBox(height: 150),
+
+            ElevatedButton(
+              onPressed: () {
+                // 1. Check if all pillars have a non-null rating selected
+
+                if (_selectedMood != null) {
+                  // All rated -> advance step
+                  nextStep();
+                } else {
+                  // 2. Clear old snackbars & show a small error
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please select a mood before continuing.'),
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+              child: const Text('Continue'),
+            ),
+          ],
+        ),
       ),
 
       CheckInStep.sleep => Column(
@@ -297,64 +381,45 @@ class _DailyLogState extends State<DailyLog> {
           const SizedBox(height: 50),
           _buildQualityOfSleepSelector(),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 150),
           ElevatedButton(
-            onPressed: () => nextStep(), // ✅ Exits the flow
-            child: const Text('Next'),
+            onPressed: () {
+              if (hoursSlept >= 0 && hoursSlept <= 14 && qualityOfSleep > 0) {
+                nextStep();
+              } else if (hoursSlept > 14) {
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Did you sleep or were you fucking dead?'),
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } else {
+                // 2. Clear old snackbars & show a small error
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Please complete sleep logging before continuing.',
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+            child: const Text('Continue'),
           ),
         ],
       ),
 
-      CheckInStep.pillars => SingleChildScrollView(
-        key: const ValueKey('pillars_step'),
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          children: [
-            // Collection-for loop + Spread operator (...)
-            for (final pillar in _pillars) ...[
-              Text(
-                pillar['prompt']!,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 15),
-              _buildPillarRatingSelector(pillar['key']!),
-              const SizedBox(height: 35),
-            ],
-
-            // Manual button to proceed since there are multiple inputs
-            ElevatedButton(
-              onPressed: () {
-                // 1. Check if all pillars have a non-null rating selected
-                final bool allRated = _pillars.every(
-                  (pillar) => pillarRatings[pillar['key']] != null,
-                );
-
-                if (allRated) {
-                  // All rated -> advance step
-                  nextStep();
-                } else {
-                  // 2. Clear old snackbars & show a small error
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Please select a rating for all pillars before continuing.',
-                      ),
-                      behavior: SnackBarBehavior.floating,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                }
-              },
-              child: const Text('Continue'),
-            ),
-          ],
-        ),
-      ),
+      CheckInStep.pillars1 => _buildSinglePillarStep(0),
+      CheckInStep.pillars2 => _buildSinglePillarStep(1),
+      CheckInStep.pillars3 => _buildSinglePillarStep(2),
+      CheckInStep.pillars4 => _buildSinglePillarStep(3),
+      CheckInStep.pillars5 => _buildSinglePillarStep(4),
+      CheckInStep.pillars6 => _buildSinglePillarStep(5),
 
       CheckInStep.complete => Column(
         key: const ValueKey('complete_step'),
@@ -366,7 +431,7 @@ class _DailyLogState extends State<DailyLog> {
           ),
           const SizedBox(height: 30),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context), // ✅ Exits the flow
+            onPressed: () => Navigator.pop(context, true), // ✅ Exits the flow
             child: const Text('Done'),
           ),
         ],

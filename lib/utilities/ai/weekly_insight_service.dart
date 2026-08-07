@@ -117,15 +117,16 @@ class WeeklyInsightService {
 
   Future<String> fetchWeeklyInsight() async {
     // 1. Load data from all 3 databases
+
+    todoDb.loadToDo();
+    todoDb.loadLongTerm();
+
     bellyDb.loadData();
 
     palimoraDb.loadData(1); // Moods
     palimoraDb.loadData(2); // Sleep
     palimoraDb.loadData(3); // Pillar Ratings
     palimoraDb.loadData(4); // Journal Entries
-
-    todoDb.loadToDo();
-    todoDb.loadLongTerm();
 
     // 2. Define the date range for the past 7 days
     final DateTime now = DateTime.now();
@@ -147,35 +148,7 @@ class WeeklyInsightService {
       }
     }
 
-    // 3. Extract & filter BellyLog Data (Past 7 Days)
-    final filteredMeals = Map.fromEntries(
-      bellyDb.mealLog.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-    final filteredSymptoms = Map.fromEntries(
-      bellyDb.symptomLog.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-    final filteredBowel = Map.fromEntries(
-      bellyDb.bowelLog.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-    final filteredDailyCheckins = Map.fromEntries(
-      bellyDb.dailyCheckins.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-
-    // 4. Extract & filter Palimora Data (Past 7 Days)
-    final filteredMoods = Map.fromEntries(
-      palimoraDb.moods.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-    final filteredSleep = Map.fromEntries(
-      palimoraDb.sleep.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-    final filteredPillarRatings = Map.fromEntries(
-      palimoraDb.pillarRatings.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-    final filteredJournalEntries = Map.fromEntries(
-      palimoraDb.journalEntries.entries.where((e) => isWithinPast7Days(e.key)),
-    );
-
-    // 5. Extract & filter ToDo Data (Past 7 Days)
+    // 3. Extract & filter ToDo Data (Past 7 Days)
     // Structure: [taskTitle, isCompleted, DateTime timestamp, priority]
     final filteredTodoList = todoDb.todoList
         .where((item) {
@@ -215,8 +188,41 @@ class WeeklyInsightService {
         )
         .toList();
 
+    // 4. Extract & filter BellyLog Data (Past 7 Days)
+    final filteredMeals = Map.fromEntries(
+      bellyDb.mealLog.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+    final filteredSymptoms = Map.fromEntries(
+      bellyDb.symptomLog.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+    final filteredBowel = Map.fromEntries(
+      bellyDb.bowelLog.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+    final filteredDailyCheckins = Map.fromEntries(
+      bellyDb.dailyCheckins.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+
+    // 5. Extract & filter Palimora Data (Past 7 Days)
+    final filteredMoods = Map.fromEntries(
+      palimoraDb.moods.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+    final filteredSleep = Map.fromEntries(
+      palimoraDb.sleep.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+    final filteredPillarRatings = Map.fromEntries(
+      palimoraDb.pillarRatings.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+    final filteredJournalEntries = Map.fromEntries(
+      palimoraDb.journalEntries.entries.where((e) => isWithinPast7Days(e.key)),
+    );
+
     // 6. Convert aggregated datasets to clean JSON strings
     const encoder = JsonEncoder.withIndent('  ');
+
+    final String todoJson = encoder.convert({
+      'daily_tasks': filteredTodoList,
+      'long_term_tasks': filteredLongTerm,
+    });
 
     final String bellyLogJson = encoder.convert({
       'meals': filteredMeals,
@@ -232,11 +238,6 @@ class WeeklyInsightService {
       'journal_entries': filteredJournalEntries,
     });
 
-    final String todoJson = encoder.convert({
-      'daily_tasks': filteredTodoList,
-      'long_term_tasks': filteredLongTerm,
-    });
-
     // 7. Format the complete prompt payload for Gemini
     final String startDateStr = DateFormat('yyyy-MM-dd').format(sevenDaysAgo);
     final String endDateStr = DateFormat('yyyy-MM-dd').format(now);
@@ -247,19 +248,21 @@ class WeeklyInsightService {
 The following dataset contains user activity recorded over the past 7 days, strictly from $startDateStr to $endDateStr.
 
 ======================================================================
-1. BELLYLOG DATA (GI Symptoms, Meals & Bowel Movements)
+1. TODO & TASK DATA (Completed Tasks & Long-Term Goals)
+======================================================================
+$todoJson
+
+======================================================================
+2. BELLYLOG DATA (GI Symptoms, Meals & Bowel Movements)
 ======================================================================
 $bellyLogJson
 
 ======================================================================
-2. PALIMORA DATA (Moods, Sleep Metrics, Life Pillars & Journal Entries)
+3. PALIMORA DATA (Moods, Sleep Metrics, Life Pillars & Journal Entries)
 ======================================================================
 $palimoraJson
 
-======================================================================
-3. TODO & TASK DATA (Completed Tasks & Long-Term Goals)
-======================================================================
-$todoJson
+
 ''';
 
     // 8. Execute request to Gemini API

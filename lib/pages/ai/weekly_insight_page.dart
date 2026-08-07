@@ -1,4 +1,4 @@
-import 'package:aletheia/pages/ai/universal_insight.dart';
+import 'package:aletheia/utilities/ai/weekly_insight_service.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 
