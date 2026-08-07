@@ -2,7 +2,6 @@ import 'package:aletheia/data/palimora_database.dart';
 import 'package:aletheia/utilities/homepages_card.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class PalimoraHomepage extends StatefulWidget {
   const PalimoraHomepage({super.key});
@@ -12,7 +11,6 @@ class PalimoraHomepage extends StatefulWidget {
 }
 
 class _PalimoraHomepageState extends State<PalimoraHomepage> {
-  final _myBox = Hive.box('MyBox');
   final PalimoraDatabase db = PalimoraDatabase();
   @override
   void initState() {
@@ -83,7 +81,7 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
               SizedBox(
                 height: 140,
                 child: HomepagesCard(
-                  icon: Icons.analytics,
+                  icon: Icons.note_rounded,
                   title: 'View Journals',
                   onTap: () =>
                       Navigator.pushNamed(context, '/view_journal_entries'),
@@ -95,10 +93,10 @@ class _PalimoraHomepageState extends State<PalimoraHomepage> {
               SizedBox(
                 height: 140,
                 child: HomepagesCard(
-                  icon: Icons.analytics,
+                  icon: Icons.auto_awesome,
                   title: 'Get Palimora Insights',
                   onTap: () =>
-                      Navigator.pushNamed(context, '/get_palimora_insight'),
+                      Navigator.pushNamed(context, '/weekly_palimora_insight'),
                 ),
               ),
               const SizedBox(height: 20),

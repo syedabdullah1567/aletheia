@@ -1,4 +1,5 @@
 import 'package:aletheia/data/palimora_database.dart';
+import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 
 class ViewLogsPage extends StatefulWidget {
@@ -29,15 +30,10 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Database Debug Viewer'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadAllData,
-            tooltip: 'Reload Data',
-          ),
-        ],
+      appBar: UniformAppbar(
+        leadIcon: Icon(Icons.arrow_back_rounded),
+        titleText: 'Your log',
+        onPress: () => Navigator.pop(context),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

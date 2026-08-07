@@ -1,4 +1,5 @@
 import 'package:aletheia/data/bellylog_database.dart';
+import 'package:aletheia/utilities/ai/ai_prompts.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
 import '../../utilities/ai/get_gemini_response.dart';
@@ -16,31 +17,14 @@ class _BellylogWeeklyState extends State<BellylogWeekly> {
   // Set isLoading to true initially so the spinner shows immediately
   bool isLoading = true;
 
-  String systemInstruction = """
-          You are BellyLog, an AI digestive health assistant inside the Aletheia app.
-
-          Your job is to analyze the user's BellyLog records and identify meaningful patterns.
-
-          Rules:
-          - Never diagnose diseases.
-          - Never recommend medication.
-          - Never claim certainty when there is insufficient evidence.
-          - Base every observation only on the provided data.
-          - If no obvious pattern exists, clearly state that.
-          - Mention possible food-symptom relationships only when supported by the data.
-          - End with 2-3 practical observations the user can monitor over the next few days.
-          - Keep the response under 300 words.
-          - Respond in plain English.
-          - Do not use Markdown, headings, tables or code blocks.
-          - You may use only bullet points and text formatting of the form that could be understood by a very basic flutter text display
-          """;
+  String systemInstruction = AiPrompts.bellylogSystemInstruction;
 
   final BellyLogDatabase db = BellyLogDatabase();
 
   @override
   void initState() {
     super.initState();
-    // Trigger the API call the moment the widget is inserted into the tree
+
     _talkToGemini();
   }
 
@@ -72,7 +56,13 @@ $bowelsJson
 ''';
 
     // Await the response
-    String theAnswer = await getGeminiResponse(systemInstruction, textToSend);
+    String theAnswer = await getGeminiResponse(
+      systemInstruction,
+      textToSend,
+      0.25,
+      0.9,
+      2048,
+    );
 
     // Only call setState if the widget is still mounted (user didn't press back while loading)
     if (mounted) {

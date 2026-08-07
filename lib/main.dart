@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:aletheia/pages/ai/bellylog_daily.dart';
 import 'package:aletheia/pages/ai/bellylog_weekly.dart';
-import 'package:aletheia/pages/ai/get_palimora_insight.dart';
+import 'package:aletheia/pages/ai/palimora_weekly.dart';
 import 'package:aletheia/pages/ai/weekly_insight_page.dart';
-import 'package:aletheia/pages/bellylog/ai_homepage_bellylog.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/notifications.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
@@ -114,18 +112,14 @@ class MyApp extends StatelessWidget {
 
           routes: {
             '/': (context) => const WelcomePage(),
+
             '/login': (context) => const LoginPage(),
+
             '/homepage': (context) => const ModuleSelector(),
 
             '/checkpoints': (context) => const HomepageCheckpoints(),
 
             '/bellylog': (context) => const AppStartPage(),
-
-            '/ai_insights_bellylog': (context) => const AiHomepageBellylog(),
-
-            '/bellylog_daily_insight': (context) => const BellylogDaily(),
-
-            '/bellylog_weekly_insight': (context) => const BellylogWeekly(),
 
             '/log_meal': (context) => const LogMeal(),
 
@@ -143,7 +137,6 @@ class MyApp extends StatelessWidget {
 
             '/view_daily_checkins': (context) => ViewDailyCheckins(),
 
-            // Palimora
             '/palimora_homepage': (context) => PalimoraHomepage(),
 
             '/palimora_daily_log': (context) => DailyLog(),
@@ -154,9 +147,11 @@ class MyApp extends StatelessWidget {
 
             '/view_journal_entries': (context) => ViewJournalEntriesPage(),
 
-            '/get_palimora_insight': (context) => GetPalimoraInsight(),
+            '/weekly_bellylog_insight': (context) => const BellylogWeekly(),
 
-            '/weekly_insight_page': (context) => WeeklyInsightPage(),
+            '/weekly_palimora_insight': (context) => PalimoraWeekly(),
+
+            '/weekly_aletheia_insight': (context) => WeeklyInsightPage(),
           },
         );
       },

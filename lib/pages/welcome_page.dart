@@ -128,7 +128,7 @@ class WelcomePage extends StatelessWidget {
                   height: 56,
                   child: FilledButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/weekly_insight_page');
+                      Navigator.pushNamed(context, '/weekly_aletheia_insight');
                     },
                     icon: const Icon(Icons.chat),
                     label: const Text(

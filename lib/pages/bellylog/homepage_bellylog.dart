@@ -20,7 +20,6 @@ class _AppStartPageState extends State<AppStartPage> {
     super.initState();
 
     db = BellyLogDatabase();
-    db.seedTest7DayData();
     //db.loadData();
   }
 
@@ -154,7 +153,7 @@ class _AppStartPageState extends State<AppStartPage> {
               sliver: SliverToBoxAdapter(
                 child: InsightsCard(
                   onTap: () {
-                    Navigator.pushNamed(context, "/ai_insights_bellylog");
+                    Navigator.pushNamed(context, "/weekly_bellylog_insight");
                   },
                 ),
               ),

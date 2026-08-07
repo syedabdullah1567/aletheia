@@ -11,6 +11,9 @@ String cleanGeminiResponse(String text) {
 Future<String> getGeminiResponse(
   String systemInstruction,
   String userInput,
+  double temp,
+  double topP,
+  double maxOutputTokens,
 ) async {
   final apiKey = dotenv.env['GEMINI_API_KEY'];
 
@@ -46,9 +49,9 @@ Future<String> getGeminiResponse(
             ],
             // 2. Fixed snake_case key
             "generation_config": {
-              "temperature": 0.2,
-              "topP": 0.9,
-              "maxOutputTokens": 2048,
+              "temperature": temp,
+              "topP": topP,
+              "maxOutputTokens": maxOutputTokens,
             },
             // 3. Fixed snake_case key
             "safety_settings": [
@@ -99,6 +102,8 @@ Future<String> getGeminiResponse(
 
     final candidate = candidates.first as Map<String, dynamic>;
     final finishReason = candidate["finishReason"];
+
+    print("Finish reason: $finishReason");
 
     if (finishReason == "SAFETY") {
       return "The response was blocked by Gemini's safety filters.";
