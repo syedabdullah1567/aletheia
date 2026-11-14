@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:aletheia/pages/ai/bellylog_weekly.dart';
 import 'package:aletheia/pages/ai/palimora_weekly.dart';
 import 'package:aletheia/pages/ai/weekly_insight_page.dart';
-import 'package:aletheia/pages/finances/finances_homepage.dart';
+import 'package:aletheia/modules/finances/screens/finances_homepage.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/notifications.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
