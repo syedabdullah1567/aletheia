@@ -1,3 +1,5 @@
+import 'package:aletheia/backup_hive.dart';
+import 'package:aletheia/restore_hive.dart';
 import 'package:aletheia/utilities/module_card.dart';
 import 'package:aletheia/utilities/uniform_appbar.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +16,13 @@ class _ModuleSelectorState extends State<ModuleSelector> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    // Custom squircle shape helper to keep code clean
 
     return Scaffold(
       appBar: UniformAppbar(
-        leadIcon: Icon(Icons.logout_rounded),
+        leadIcon: const Icon(Icons.logout_rounded),
         titleText: "Aletheia",
         onPress: () => Navigator.pushReplacementNamed(context, '/'),
       ),
-
       body: Center(
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -117,7 +117,97 @@ class _ModuleSelectorState extends State<ModuleSelector> {
                         },
                       ),
 
+                      const SizedBox(height: 12),
+
+                      ModuleCard(
+                        title: 'Finances',
+                        subtitle: 'Track your resources and shape your future.',
+                        icon: Icons.account_balance_wallet_outlined,
+                        height: 176,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            colorScheme.secondaryContainer,
+                            colorScheme.tertiaryContainer,
+                          ],
+                        ),
+                        foregroundColor: colorScheme.onSecondaryContainer,
+                        onTap: () {
+                          Navigator.pushNamed(context, '/finances_homepage');
+                        },
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      ModuleCard(
+                        title: 'Notes',
+                        subtitle:
+                            'Capture fleeting thoughts and quiet ideas.',
+                        icon: Icons.edit_note_rounded,
+                        height: 176,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            colorScheme.primaryContainer,
+                            colorScheme.surfaceContainerHighest,
+                          ],
+                        ),
+                        foregroundColor: colorScheme.onPrimaryContainer,
+                        onTap: () {
+                          Navigator.pushNamed(context, '');
+                        },
+                      ),
+
                       const SizedBox(height: 15),
+
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
+                            spacing: 16,
+                            runSpacing: 12,
+                            children: [
+                              FilledButton(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor:
+                                      colorScheme.surfaceContainerHighest,
+                                  foregroundColor: colorScheme.onSurface,
+                                  elevation: 2,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 14,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () => backupHiveDatabase(context),
+                                child: const Text('Backup Data'),
+                              ),
+                              FilledButton(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor:
+                                      colorScheme.surfaceContainerHighest,
+                                  foregroundColor: colorScheme.onSurface,
+                                  elevation: 2,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 14,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () => restoreHiveDatabase(context),
+                                child: const Text('Restore Data'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
 
                       Center(
                         child: Text(

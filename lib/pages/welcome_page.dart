@@ -139,7 +139,7 @@ class WelcomePage extends StatelessWidget {
                       ),
                     ),
                     style: FilledButton.styleFrom(
-                      backgroundColor: colorScheme.secondaryContainer,
+                      backgroundColor: colorScheme.primary.withValues(alpha: 0.2),
                       foregroundColor: colorScheme.onSecondaryContainer,
                       elevation: 0,
                       shape: RoundedRectangleBorder(

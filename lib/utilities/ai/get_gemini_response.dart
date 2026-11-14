@@ -21,7 +21,7 @@ Future<String> getGeminiResponse(
     return 'Gemini API key not found.';
   }
 
-  const String modelName = 'gemini-3.6-flash';
+  const String modelName = 'gemini-3.8-flash';
   final String endPoint =
       'https://generativelanguage.googleapis.com/v1beta/models/$modelName:generateContent?key=$apiKey';
 

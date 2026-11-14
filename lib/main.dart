@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aletheia/pages/ai/bellylog_weekly.dart';
 import 'package:aletheia/pages/ai/palimora_weekly.dart';
 import 'package:aletheia/pages/ai/weekly_insight_page.dart';
+import 'package:aletheia/pages/finances/finances_homepage.dart';
 import 'package:aletheia/pages/login_page.dart';
 import 'package:aletheia/pages/notifications.dart';
 import 'package:aletheia/pages/palimora/daily_log.dart';
@@ -39,8 +40,8 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  NotifyTasks().initNotification();
-  NotifyTasks().requestAndroidPermissions();
+  // NotifyTasks().initNotification();
+  // NotifyTasks().requestAndroidPermissions();
 
   await dotenv.load(fileName: ".env");
 
@@ -108,7 +109,7 @@ class MyApp extends StatelessWidget {
 
           themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-          initialRoute: '/',
+          initialRoute: '/homepage',
 
           routes: {
             '/': (context) => const WelcomePage(),
@@ -152,6 +153,10 @@ class MyApp extends StatelessWidget {
             '/weekly_palimora_insight': (context) => PalimoraWeekly(),
 
             '/weekly_aletheia_insight': (context) => WeeklyInsightPage(),
+
+            //finances
+            '/finances_homepage': (context) => const FinancesHomepage(),
+
           },
         );
       },
