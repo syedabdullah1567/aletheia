@@ -10,12 +10,12 @@ class PersonBalanceTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const PersonBalanceTile({
-    Key? key,
+    super.key,
     required this.balance,
     required this.red,
     required this.green,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

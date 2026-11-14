@@ -14,10 +14,10 @@ class PersonDetailPage extends StatelessWidget {
   final String personId;
 
   const PersonDetailPage({
-    Key? key,
+    super.key,
     required this.controller,
     required this.personId,
-  }) : super(key: key);
+  });
 
   Future<void> _rename(BuildContext context, Person person) async {
     final newName = await showDialog<String>(
@@ -321,7 +321,7 @@ class _TransactionTile extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         tileColor: colorScheme.surfaceContainerLow,
         leading: CircleAvatar(
-          backgroundColor: accent.withOpacity(0.18),
+          backgroundColor: accent.withValues(alpha: 0.18),
           child: Icon(
             isGave ? Icons.north_east_rounded : Icons.south_west_rounded,
             color: accent,

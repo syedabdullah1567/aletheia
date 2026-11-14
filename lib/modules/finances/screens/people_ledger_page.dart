@@ -11,8 +11,7 @@ import 'person_detail_page.dart';
 class PeopleLedgerPage extends StatefulWidget {
   final FinanceController controller;
 
-  const PeopleLedgerPage({Key? key, required this.controller})
-      : super(key: key);
+  const PeopleLedgerPage({super.key, required this.controller});
 
   @override
   State<PeopleLedgerPage> createState() => _PeopleLedgerPageState();

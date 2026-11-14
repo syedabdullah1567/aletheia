@@ -23,14 +23,14 @@ class FinanceSummaryCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const FinanceSummaryCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.icon,
     required this.stats,
     required this.backgroundColor,
     required this.foregroundColor,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class FinanceSummaryCard extends StatelessWidget {
                   ),
                   Icon(
                     Icons.chevron_right_rounded,
-                    color: foregroundColor.withOpacity(0.7),
+                    color: foregroundColor.withValues(alpha: 0.7),
                   ),
                 ],
               ),
@@ -80,7 +80,7 @@ class FinanceSummaryCard extends StatelessWidget {
                           Text(
                             stat.label,
                             style: textTheme.bodySmall?.copyWith(
-                              color: foregroundColor.withOpacity(0.8),
+                              color: foregroundColor.withValues(alpha: 0.8),
                             ),
                           ),
                           const SizedBox(height: 4),

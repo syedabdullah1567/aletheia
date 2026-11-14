@@ -34,11 +34,11 @@ class LedgerTransactionSheet extends StatefulWidget {
   final LedgerTransaction? existing;
 
   const LedgerTransactionSheet({
-    Key? key,
+    super.key,
     required this.controller,
     this.person,
     this.existing,
-  }) : super(key: key);
+  });
 
   @override
   State<LedgerTransactionSheet> createState() => _LedgerTransactionSheetState();

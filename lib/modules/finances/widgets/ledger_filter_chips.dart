@@ -14,14 +14,14 @@ class LedgerFilterChips extends StatelessWidget {
   final Color green;
 
   const LedgerFilterChips({
-    Key? key,
+    super.key,
     required this.selected,
     required this.onChanged,
     required this.iOweTotal,
     required this.owedToMeTotal,
     required this.red,
     required this.green,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class _FilterPill extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Material(
-      color: isSelected ? color.withOpacity(0.18) : Colors.transparent,
+      color: isSelected ? color.withValues(alpha: 0.18) : Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(color: color, width: isSelected ? 2 : 1),

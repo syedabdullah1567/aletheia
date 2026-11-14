@@ -24,8 +24,7 @@ class ExpenseSheet extends StatefulWidget {
   final FinanceController controller;
   final ExpenseEntry? existing;
 
-  const ExpenseSheet({Key? key, required this.controller, this.existing})
-      : super(key: key);
+  const ExpenseSheet({super.key, required this.controller, this.existing});
 
   @override
   State<ExpenseSheet> createState() => _ExpenseSheetState();

@@ -8,7 +8,7 @@ import '../utils/finance_formatters.dart';
 class CategoryBreakdown extends StatelessWidget {
   final Map<String, double> totals;
 
-  const CategoryBreakdown({Key? key, required this.totals}) : super(key: key);
+  const CategoryBreakdown({super.key, required this.totals});
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ import 'income_page.dart';
 import 'people_ledger_page.dart';
 
 class FinancesHomepage extends StatefulWidget {
-  const FinancesHomepage({Key? key}) : super(key: key);
+  const FinancesHomepage({super.key});
 
   @override
   State<FinancesHomepage> createState() => _FinancesHomepageState();

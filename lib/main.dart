@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aletheia/file_permission.dart';
 import 'package:aletheia/pages/ai/bellylog_weekly.dart';
 import 'package:aletheia/pages/ai/palimora_weekly.dart';
 import 'package:aletheia/pages/ai/weekly_insight_page.dart';
@@ -40,10 +41,12 @@ void main() async {
   // ignore: unused_local_variable
   var box = await Hive.openBox('MyBox');
 
-  // NotifyTasks().initNotification();
-  // NotifyTasks().requestAndroidPermissions();
+  NotifyTasks().initNotification();
+  NotifyTasks().requestAndroidPermissions();
 
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "env");
+
+  // requestManageExternalStorage();
 
   if (Platform.isAndroid) {
     try {

@@ -13,14 +13,14 @@ class MonthHeader extends StatelessWidget {
   final Color? accentColor;
 
   const MonthHeader({
-    Key? key,
+    super.key,
     required this.month,
     required this.totalLabel,
     required this.total,
     required this.onPrevious,
     required this.onNext,
     this.accentColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

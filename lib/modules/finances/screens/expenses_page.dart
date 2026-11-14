@@ -11,7 +11,7 @@ import '../widgets/category_breakdown.dart';
 class ExpensesPage extends StatelessWidget {
   final FinanceController controller;
 
-  const ExpensesPage({Key? key, required this.controller}) : super(key: key);
+  const ExpensesPage({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -210,12 +210,12 @@ class ExpenseTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const ExpenseTile({
-    Key? key,
+    super.key,
     required this.entry,
     required this.amountColor,
     required this.onTap,
     this.tileColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -33,8 +33,7 @@ class IncomeSheet extends StatefulWidget {
   final FinanceController controller;
   final IncomeEntry? existing;
 
-  const IncomeSheet({Key? key, required this.controller, this.existing})
-      : super(key: key);
+  const IncomeSheet({super.key, required this.controller, this.existing});
 
   @override
   State<IncomeSheet> createState() => _IncomeSheetState();

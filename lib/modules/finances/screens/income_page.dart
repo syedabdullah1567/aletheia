@@ -10,7 +10,7 @@ import '../widgets/month_header.dart';
 class IncomePage extends StatefulWidget {
   final FinanceController controller;
 
-  const IncomePage({Key? key, required this.controller}) : super(key: key);
+  const IncomePage({super.key, required this.controller});
 
   @override
   State<IncomePage> createState() => _IncomePageState();
